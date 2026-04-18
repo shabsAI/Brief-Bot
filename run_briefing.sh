@@ -1,19 +1,33 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BRIEFING_DIR="/home/user/Brief-Bot/briefings"
+REPO_DIR="/home/user/Brief-Bot"
+OUTPUT_FILE="${REPO_DIR}/briefing.html"
+TEMPLATE_FILE="${REPO_DIR}/briefing_template.html"
 DATE=$(date +%Y-%m-%d)
-OUTPUT_FILE="${BRIEFING_DIR}/${DATE}.md"
+DISPLAY_DATE=$(date "+%A, %B %-d, %Y")
 
-mkdir -p "$BRIEFING_DIR"
+PROMPT="You are a personal intelligence researcher producing a daily briefing for SHABS (two people: Abby, a UX Designer, and Shane, a Mechanical Engineer) based in St. Louis, MO.
 
-PROMPT='You are a personal intelligence researcher. Your goal is to produce a concise, high quality daily news briefing (US and work) that mirrors a presidential daily briefing but for shabs. Focus on developments from the last 24-48hrs.
+Produce today's briefing as valid HTML only — no markdown, no preamble, no explanation. Use the template below and fill in every <!-- REPLACE --> placeholder with real, current, verified data. Do not change the HTML structure or CSS.
 
-High signal, low noise: Focus on impact not just clicks.
-Balanced perspective: If a story is highly partisan or contested, briefly explain the differing narratives.
-Accuracy: Only include verified information. If a story is breaking and unconfirmed, note it as such.
-Citation: Cite your sources at the end of each story.'
+Rules:
+- High signal, low noise. Impact over clicks.
+- Balanced perspective on partisan issues.
+- Mark unverified/breaking stories as such.
+- Cite sources inline in the summary text (e.g. via Reuters, WSJ).
+- Today's date: ${DISPLAY_DATE}
+
+TEMPLATE:
+$(cat "$TEMPLATE_FILE")
+"
 
 /opt/node22/bin/claude -p "$PROMPT" > "$OUTPUT_FILE" 2>&1
 
-echo "Briefing saved to $OUTPUT_FILE"
+# Push to GitHub
+cd "$REPO_DIR"
+git add briefing.html
+git commit -m "Briefing ${DATE}"
+git push
+
+echo "Briefing published for ${DATE}"

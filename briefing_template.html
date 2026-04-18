@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Briefing</title>
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface2: #f0ede6;
+      --text: #1a1a18;
+      --text-muted: #5f5e5a;
+      --border: rgba(0,0,0,0.1);
+      --radius: 12px;
+      --radius-sm: 8px;
+
+      --blue-bg: #e6f1fb; --blue-text: #0c447c; --blue-border: #378add;
+      --green-bg: #eaf3de; --green-text: #3b6d11; --green-border: #639922;
+      --amber-bg: #faeeda; --amber-text: #854f0b; --amber-border: #ba7517;
+      --teal-bg: #e1f5ee; --teal-text: #0f6e56; --teal-border: #1d9e75;
+      --coral-bg: #faece7; --coral-text: #993c1d; --coral-border: #d85a30;
+      --purple-bg: #eeedfe; --purple-text: #3c3489; --purple-border: #7f77dd;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a18;
+        --surface: #26261f;
+        --surface2: #2c2c2a;
+        --text: #f0ede6;
+        --text-muted: #b4b2a9;
+        --border: rgba(255,255,255,0.1);
+
+        --blue-bg: #042c53; --blue-text: #b5d4f4; --blue-border: #185fa5;
+        --green-bg: #173404; --green-text: #c0dd97; --green-border: #3b6d11;
+        --amber-bg: #412402; --amber-text: #fac775; --amber-border: #854f0b;
+        --teal-bg: #04342c; --teal-text: #9fe1cb; --teal-border: #0f6e56;
+        --coral-bg: #4a1b0c; --coral-text: #f5c4b3; --coral-border: #993c1d;
+        --purple-bg: #26215c; --purple-text: #cecbf6; --purple-border: #534ab7;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .header .date {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Grid layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .grid-full {
+      grid-column: 1 / -1;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+    }
+
+    /* Weather card */
+    .weather-icon { background: var(--blue-bg); }
+    .weather-main {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .weather-temp {
+      font-size: 2.8rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--blue-text);
+    }
+    .weather-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      padding-bottom: 4px;
+    }
+    .weather-details {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .weather-detail {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .weather-detail span {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .weather-forecast {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .forecast-item {
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      text-align: center;
+      flex: 1;
+      min-width: 50px;
+    }
+    .forecast-day { color: var(--text-muted); font-size: 0.72rem; }
+    .forecast-temp { font-weight: 600; }
+
+    /* News items */
+    .news-icon { background: var(--coral-bg); }
+    .us-news-icon { background: var(--purple-bg); }
+
+    .news-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .news-item {
+      padding-bottom: 0.75rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .news-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-world { background: var(--coral-bg); color: var(--coral-text); }
+    .tag-politics { background: var(--purple-bg); color: var(--purple-text); }
+    .tag-economy { background: var(--amber-bg); color: var(--amber-text); }
+    .tag-tech { background: var(--blue-bg); color: var(--blue-text); }
+    .tag-breaking { background: var(--teal-bg); color: var(--teal-text); }
+
+    .news-headline {
+      font-size: 0.92rem;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .news-summary {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    /* Markets */
+    .markets-icon { background: var(--green-bg); }
+    .markets-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .market-item {
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+    }
+    .market-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .market-value { font-size: 1.05rem; font-weight: 600; margin: 2px 0; }
+    .market-change { font-size: 0.8rem; font-weight: 500; }
+    .up { color: var(--green-text); }
+    .down { color: var(--coral-text); }
+    .market-context {
+      margin-top: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+    }
+
+    /* To-do */
+    .todo-icon { background: var(--amber-bg); }
+    .todo-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .todo-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--surface2);
+    }
+    .todo-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: var(--surface);
+    }
+    .todo-text { font-size: 0.88rem; line-height: 1.45; }
+    .todo-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 1px; }
+    .priority-high .todo-check { border-color: var(--coral-border); }
+    .priority-med .todo-check { border-color: var(--amber-border); }
+    .priority-low .todo-check { border-color: var(--green-border); }
+
+    /* Footer */
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>Good morning, SHABS ☀️</h1>
+    <span class="date" id="briefing-date"><!-- REPLACE: e.g. Friday, April 18, 2025 --></span>
+  </div>
+
+  <div class="grid">
+
+    <!-- WEATHER -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon weather-icon">🌤</div>
+        <span class="card-title">Weather — St. Louis</span>
+      </div>
+      <div class="weather-main">
+        <div class="weather-temp" id="weather-temp"><!-- REPLACE: 62°F --></div>
+        <div class="weather-desc" id="weather-desc"><!-- REPLACE: Partly Cloudy --></div>
+      </div>
+      <div class="weather-details">
+        <div class="weather-detail">High <span id="weather-high"><!-- REPLACE: 68°F --></span></div>
+        <div class="weather-detail">Low <span id="weather-low"><!-- REPLACE: 49°F --></span></div>
+        <div class="weather-detail">Wind <span id="weather-wind"><!-- REPLACE: 12 mph SW --></span></div>
+        <div class="weather-detail">Humidity <span id="weather-humidity"><!-- REPLACE: 54% --></span></div>
+      </div>
+      <div class="weather-forecast">
+        <!-- REPLACE: Clone these for each forecast day -->
+        <div class="forecast-item">
+          <div class="forecast-day">Sat</div>
+          <div>🌧</div>
+          <div class="forecast-temp">61°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Sun</div>
+          <div>☀️</div>
+          <div class="forecast-temp">71°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Mon</div>
+          <div>⛅</div>
+          <div class="forecast-temp">65°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Tue</div>
+          <div>☀️</div>
+          <div class="forecast-temp">74°</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKETS -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon markets-icon">📈</div>
+        <span class="card-title">Markets</span>
+      </div>
+      <div class="markets-grid">
+        <!-- REPLACE values and classes (up/down) for each ticker -->
+        <div class="market-item">
+          <div class="market-label">S&amp;P 500</div>
+          <div class="market-value" id="sp500"><!-- REPLACE: 5,218 --></div>
+          <div class="market-change up" id="sp500-change"><!-- REPLACE: ▲ +0.8% --></div>
+        </div>
+        <div class="market-item">
+          <div class="market-label">Nasdaq</div>
+          <div class="market-value" id="nasdaq"><!-- REPLACE: 16,340 --></div>
+          <div class="market-change down" id="nasdaq-change"><!-- REPLACE: ▼ -0.3% --></div>
+        </div>
+        <div class="market-item">
+          <div class="market-label">Dow Jones</div>
+          <div class="market-value" id="dow"><!-- REPLACE: 38,890 --></div>
+          <div class="market-change up" id="dow-change"><!-- REPLACE: ▲ +0.5% --></div>
+        </div>
+        <div class="market-item">
+          <div class="market-label">10-Yr Yield</div>
+          <div class="market-value" id="treasury"><!-- REPLACE: 4.32% --></div>
+          <div class="market-change up" id="treasury-change"><!-- REPLACE: ▲ +0.04 --></div>
+        </div>
+        <div class="market-item">
+          <div class="market-label">Bitcoin</div>
+          <div class="market-value" id="btc"><!-- REPLACE: $68,200 --></div>
+          <div class="market-change up" id="btc-change"><!-- REPLACE: ▲ +2.1% --></div>
+        </div>
+        <div class="market-item">
+          <div class="market-label">Oil (WTI)</div>
+          <div class="market-value" id="oil"><!-- REPLACE: $81.40 --></div>
+          <div class="market-change down" id="oil-change"><!-- REPLACE: ▼ -0.6% --></div>
+        </div>
+      </div>
+      <div class="market-context" id="market-context">
+        <!-- REPLACE: 1–2 sentence market summary, e.g.: Equities mixed ahead of Fed minutes. Tech dragged by NVDA guidance revision. -->
+      </div>
+    </div>
+
+    <!-- WORLD NEWS -->
+    <div class="card grid-full">
+      <div class="card-header">
+        <div class="card-icon news-icon">🌍</div>
+        <span class="card-title">World News</span>
+      </div>
+      <div class="news-list" id="world-news">
+        <!-- REPLACE: Duplicate .news-item blocks as needed. Change tag class and text. -->
+        <div class="news-item">
+          <span class="news-tag tag-world">World</span>
+          <div class="news-headline"><!-- REPLACE: Headline here --></div>
+          <div class="news-summary"><!-- REPLACE: 1–2 sentence summary here --></div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-economy">Economy</span>
+          <div class="news-headline"><!-- REPLACE: Headline here --></div>
+          <div class="news-summary"><!-- REPLACE: 1–2 sentence summary here --></div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-tech">Tech</span>
+          <div class="news-headline"><!-- REPLACE: Headline here --></div>
+          <div class="news-summary"><!-- REPLACE: 1–2 sentence summary here --></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- US NEWS & POLITICS -->
+    <div class="card grid-full">
+      <div class="card-header">
+        <div class="card-icon us-news-icon">🇺🇸</div>
+        <span class="card-title">US News &amp; Politics</span>
+      </div>
+      <div class="news-list" id="us-news">
+        <!-- REPLACE: Same pattern as world news -->
+        <div class="news-item">
+          <span class="news-tag tag-politics">Politics</span>
+          <div class="news-headline"><!-- REPLACE: Headline here --></div>
+          <div class="news-summary"><!-- REPLACE: 1–2 sentence summary here --></div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-economy">Economy</span>
+          <div class="news-headline"><!-- REPLACE: Headline here --></div>
+          <div class="news-summary"><!-- REPLACE: 1–2 sentence summary here --></div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-politics">Politics</span>
+          <div class="news-headline"><!-- REPLACE: Headline here --></div>
+          <div class="news-summary"><!-- REPLACE: 1–2 sentence summary here --></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TO-DO -->
+    <div class="card grid-full">
+      <div class="card-header">
+        <div class="card-icon todo-icon">✅</div>
+        <span class="card-title">Today's To-Do</span>
+      </div>
+      <div class="todo-list" id="todo-list">
+        <!-- REPLACE: Add priority-high / priority-med / priority-low class to .todo-item -->
+        <div class="todo-item priority-high">
+          <div class="todo-check"></div>
+          <div>
+            <div class="todo-text"><!-- REPLACE: Task title --></div>
+            <div class="todo-sub"><!-- REPLACE: Optional note or time --></div>
+          </div>
+        </div>
+        <div class="todo-item priority-med">
+          <div class="todo-check"></div>
+          <div>
+            <div class="todo-text"><!-- REPLACE: Task title --></div>
+            <div class="todo-sub"><!-- REPLACE: Optional note --></div>
+          </div>
+        </div>
+        <div class="todo-item priority-low">
+          <div class="todo-check"></div>
+          <div>
+            <div class="todo-text"><!-- REPLACE: Task title --></div>
+            <div class="todo-sub"><!-- REPLACE: Optional note --></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">Generated by your daily briefing agent &mdash; <span id="gen-time"></span></div>
+</div>
+
+<script>
+  const now = new Date();
+  document.getElementById('gen-time').textContent = 'Updated ' + now.toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit'});
+</script>
+</body>
+</html>
