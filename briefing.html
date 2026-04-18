@@ -1,0 +1,13 @@
+The `briefing.html` exists but is empty (0 bytes) — it was created by the script but never filled because I couldn't reach the web. Committing an empty file isn't useful.
+
+The situation:
+- `run_briefing.sh` calls `claude -p "..."` and pipes output to `briefing.html`
+- The prompt requires live web data (weather, markets, news)
+- `WebSearch` and `WebFetch` are not yet permitted in this session, so the briefing couldn't be generated
+
+**To fix the full pipeline:**
+
+1. Grant `WebSearch` and `WebFetch` permissions (see my previous message for options)
+2. Re-run `run_briefing.sh` — it will generate the HTML and then auto-commit/push via the script's own `git add / commit / push` block
+
+Once those permissions are in place the script is fully self-contained and the stop hook won't trigger on an empty file again.
