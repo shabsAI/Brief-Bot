@@ -6,6 +6,20 @@ OUTPUT_FILE="${REPO_DIR}/briefing.html"
 TEMPLATE_FILE="${REPO_DIR}/briefing_template.html"
 DATE=$(date +%Y-%m-%d)
 DISPLAY_DATE=$(date "+%A, %B %-d, %Y")
+LOG_FILE="${REPO_DIR}/briefing.log"
+
+# Load API key
+if [ -f "${REPO_DIR}/.env" ]; then
+  source "${REPO_DIR}/.env"
+fi
+
+exec >> "$LOG_FILE" 2>&1
+echo "[$(date)] Starting briefing generation"
+
+# Ensure we're on main and up to date
+cd "$REPO_DIR"
+git checkout main
+git pull origin main
 
 PROMPT="You are a personal intelligence researcher producing a daily briefing for SHABS (two people: Abby, a UX Designer, and Shane, a Mechanical Engineer) based in St. Louis, MO.
 
@@ -25,9 +39,8 @@ $(cat "$TEMPLATE_FILE")
 /opt/node22/bin/claude -p "$PROMPT" > "$OUTPUT_FILE" 2>&1
 
 # Push to GitHub
-cd "$REPO_DIR"
 git add briefing.html
 git commit -m "Briefing ${DATE}"
-git push
+git push origin main
 
-echo "Briefing published for ${DATE}"
+echo "[$(date)] Briefing published for ${DATE}"
