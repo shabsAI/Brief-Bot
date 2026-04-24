@@ -2,8 +2,6 @@
 set -euo pipefail
 
 REPO_DIR="/home/user/Brief-Bot"
-OUTPUT_FILE="${REPO_DIR}/briefing.html"
-TEMPLATE_FILE="${REPO_DIR}/briefing_template.html"
 DATE=$(date +%Y-%m-%d)
 DISPLAY_DATE=$(date "+%A, %B %-d, %Y")
 LOG_FILE="${REPO_DIR}/briefing.log"
@@ -13,34 +11,43 @@ if [ -f "${REPO_DIR}/.env" ]; then
   source "${REPO_DIR}/.env"
 fi
 
-exec >> "$LOG_FILE" 2>&1
-echo "[$(date)] Starting briefing generation"
-
-# Ensure we're on main and up to date
-cd "$REPO_DIR"
-git checkout main
-git pull origin main
+echo "[$(date)] Starting briefing generation" >> "$LOG_FILE"
 
 PROMPT="You are a personal intelligence researcher producing a daily briefing for SHABS (two people: Abby, a UX Designer, and Shane, a Mechanical Engineer) based in St. Louis, MO.
 
-Produce today's briefing as valid HTML only — no markdown, no preamble, no explanation. Use the template below and fill in every <!-- REPLACE --> placeholder with real, current, verified data. Do not change the HTML structure or CSS.
+Output only the briefing in plain text with markdown formatting — no preamble, no explanation, no HTML.
 
 Rules:
 - High signal, low noise. Impact over clicks.
 - Balanced perspective on partisan issues.
-- Mark unverified/breaking stories as such.
-- Cite sources inline in the summary text (e.g. via Reuters, WSJ).
+- Mark unverified or breaking stories with (UNVERIFIED) or (BREAKING).
+- Cite sources inline (e.g. via Reuters, WSJ).
 - Today's date: ${DISPLAY_DATE}
 
-TEMPLATE:
-$(cat "$TEMPLATE_FILE")
+Use this format exactly:
+
+# Good morning, SHABS — ${DISPLAY_DATE}
+
+## Weather — St. Louis
+Current temp and conditions, high/low, wind, humidity. Then a 4-day forecast.
+
+## Markets
+S&P 500, Nasdaq, Dow Jones, 10-Yr Yield, Bitcoin, Oil (WTI) — value and % change each.
+One or two sentence market context summary.
+
+## World News
+3–5 stories in this format:
+[WORLD/ECONOMY/TECH] Headline — 1–2 sentence summary with source.
+
+## US News & Politics
+3–5 stories in this format:
+[POLITICS/ECONOMY] Headline — 1–2 sentence summary with source.
+
+## Today's To-Do
+3–5 items in this format:
+[HIGH/MED/LOW] Task — optional note or time
 "
 
-/opt/node22/bin/claude -p "$PROMPT" > "$OUTPUT_FILE" 2>&1
+/opt/node22/bin/claude -p "$PROMPT"
 
-# Push to GitHub
-git add briefing.html
-git commit -m "Briefing ${DATE}"
-git push origin main
-
-echo "[$(date)] Briefing published for ${DATE}"
+echo "[$(date)] Briefing complete for ${DATE}" >> "$LOG_FILE"
