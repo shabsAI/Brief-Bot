@@ -90,21 +90,20 @@
       text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted);
     }
 
-    /* Weather alert banner */
     .weather-alert {
-      background: var(--coral-bg);
-      border: 1px solid var(--coral-border);
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-border);
       border-radius: var(--radius-sm);
       padding: 8px 12px;
       margin-bottom: 0.75rem;
       font-size: 0.82rem;
-      color: var(--coral-text);
+      color: var(--amber-text);
       font-weight: 600;
     }
 
-    .weather-icon { background: var(--coral-bg); }
+    .weather-icon { background: var(--blue-bg); }
     .weather-main { display: flex; align-items: flex-end; gap: 0.75rem; margin-bottom: 0.75rem; }
-    .weather-temp { font-size: 2.8rem; font-weight: 300; line-height: 1; color: var(--coral-text); }
+    .weather-temp { font-size: 2.8rem; font-weight: 300; line-height: 1; color: var(--blue-text); }
     .weather-desc { font-size: 0.95rem; color: var(--text-muted); padding-bottom: 4px; }
     .weather-details { display: flex; gap: 1rem; flex-wrap: wrap; }
     .weather-detail { font-size: 0.82rem; color: var(--text-muted); }
@@ -173,7 +172,7 @@
 
   <div class="header">
     <h1>Good morning, SHABS ☀️</h1>
-    <span class="date">Monday, April 27, 2026</span>
+    <span class="date">Tuesday, April 28, 2026</span>
   </div>
 
   <div class="grid">
@@ -181,26 +180,21 @@
     <!-- WEATHER -->
     <div class="card">
       <div class="card-header">
-        <div class="card-icon weather-icon">⛈</div>
+        <div class="card-icon weather-icon">🌦</div>
         <span class="card-title">Weather — St. Louis</span>
       </div>
-      <div class="weather-alert">⚠️ Moderate Risk: Severe storms 2–10 PM — damaging winds 50–70 mph, large hail, tornadoes possible</div>
+      <div class="weather-alert">⚠️ Flood warnings in effect for nearby Missouri rivers through Friday AM — avoid low-lying roads</div>
       <div class="weather-main">
-        <div class="weather-temp">68°F</div>
-        <div class="weather-desc">Morning showers → severe storms PM</div>
+        <div class="weather-temp">60°F</div>
+        <div class="weather-desc">Partly sunny, PM thundershower possible</div>
       </div>
       <div class="weather-details">
-        <div class="weather-detail">High <span>83°F</span></div>
-        <div class="weather-detail">Low <span>58°F</span></div>
-        <div class="weather-detail">Wind <span>gusts to 70 mph</span></div>
-        <div class="weather-detail">Storm risk <span>Level 4/5</span></div>
+        <div class="weather-detail">High <span>68°F</span></div>
+        <div class="weather-detail">Low <span>50°F</span></div>
+        <div class="weather-detail">Wind <span>10 mph SW</span></div>
+        <div class="weather-detail">Rain chance <span>50% PM</span></div>
       </div>
       <div class="weather-forecast">
-        <div class="forecast-item">
-          <div class="forecast-day">Tue</div>
-          <div>🌧</div>
-          <div class="forecast-temp">66°</div>
-        </div>
         <div class="forecast-item">
           <div class="forecast-day">Wed</div>
           <div>⛅</div>
@@ -216,6 +210,11 @@
           <div>☀️</div>
           <div class="forecast-temp">80°</div>
         </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Sat</div>
+          <div>☀️</div>
+          <div class="forecast-temp">79°</div>
+        </div>
       </div>
     </div>
 
@@ -223,42 +222,42 @@
     <div class="card">
       <div class="card-header">
         <div class="card-icon markets-icon">📈</div>
-        <span class="card-title">Markets — Futures</span>
+        <span class="card-title">Markets — Mon Close</span>
       </div>
       <div class="markets-grid">
         <div class="market-item">
           <div class="market-label">S&amp;P 500</div>
-          <div class="market-value">7,189</div>
-          <div class="market-change flat">— flat</div>
+          <div class="market-value">7,173 ★</div>
+          <div class="market-change up">▲ +0.1% — record</div>
         </div>
         <div class="market-item">
           <div class="market-label">Nasdaq</div>
-          <div class="market-value">27,423</div>
-          <div class="market-change flat">— flat</div>
+          <div class="market-value">24,887 ★</div>
+          <div class="market-change up">▲ +0.2% — record</div>
         </div>
         <div class="market-item">
           <div class="market-label">Dow Jones</div>
-          <div class="market-value">49,333</div>
+          <div class="market-value">49,167</div>
           <div class="market-change down">▼ −0.1%</div>
         </div>
         <div class="market-item">
           <div class="market-label">10-Yr Yield</div>
-          <div class="market-value">4.43%</div>
-          <div class="market-change down">▼ −0.02</div>
+          <div class="market-value">4.42%</div>
+          <div class="market-change down">▼ −0.03</div>
         </div>
         <div class="market-item">
           <div class="market-label">Bitcoin</div>
-          <div class="market-value">~$76,400</div>
-          <div class="market-change down">▼ −2.3%</div>
+          <div class="market-value">~$78,000</div>
+          <div class="market-change flat">— flat</div>
         </div>
         <div class="market-item">
           <div class="market-label">Oil (WTI)</div>
-          <div class="market-value">$96.50</div>
-          <div class="market-change up">▲ +1.9%</div>
+          <div class="market-value">~$96</div>
+          <div class="market-change flat">— flat</div>
         </div>
       </div>
       <div class="market-context">
-        Futures opened lower on stalled Iran talks, then recovered after Iran submitted a new Hormuz proposal. Big week: MSFT, AMZN, GOOG, META &amp; AAPL all report earnings. Fed decision Wednesday — hold widely expected (via CNBC, TheStreet, Yahoo Finance).
+        S&amp;P 500 and Nasdaq hit fresh records Monday despite stalled Iran talks — tech earnings optimism won out. Fed begins its 2-day meeting today; decision tomorrow, hold expected. MSFT and META report after close today (via Yahoo Finance, CNBC).
       </div>
     </div>
 
@@ -271,23 +270,23 @@
       <div class="news-list">
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
-          <div class="news-headline">King Charles Arrives in Washington for High-Stakes US State Visit</div>
-          <div class="news-summary">King Charles III and Queen Camilla landed in DC today for a four-day visit — the first British royal state visit to the US in over two decades. Tensions run high: Trump has called PM Starmer a "loser" over the UK's refusal to join the US military operation to reopen the Strait of Hormuz. Charles will address a joint session of Congress, the first British monarch to do so since 1991 (via CNN, NPR, Al Jazeera).</div>
+          <div class="news-headline">King Charles Meets Trump at White House Today — State Dinner Tonight</div>
+          <div class="news-summary">Day two of the royal state visit features a bilateral meeting in the Oval Office and a White House state dinner tonight. Analysts describe it as "crisis management through ceremony" — the visit is aimed at patching up US-UK tensions after Trump called PM Starmer a "loser" for refusing to back the Iran military operation. Charles addresses a joint session of Congress tomorrow (via PBS, CNN, Al Jazeera).</div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-economy">Economy</span>
+          <div class="news-headline">EU Approves $106 Billion Ukraine Loan Package After Months of Deadlock</div>
+          <div class="news-summary">The European Union signed off on a major two-year economic and military support package for Ukraine, ending a prolonged political impasse among member states. The funding is structured as a loan backed by frozen Russian sovereign assets (via Reuters, Euronews).</div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
-          <div class="news-headline">Iran FM Flies to Moscow After US Talks Collapse</div>
-          <div class="news-summary">Iran's foreign minister arrived in Russia seeking diplomatic backing following the breakdown of indirect US-Iran negotiations. Iran has also submitted a new proposal aimed at reopening the Strait of Hormuz, which briefly stabilized oil markets this morning (via Reuters, CNN).</div>
-        </div>
-        <div class="news-item">
-          <span class="news-tag tag-breaking">Breaking</span>
-          <div class="news-headline">Major Coordinated Attack Hits Mali's Capital Bamako</div>
-          <div class="news-summary">Gunfire and explosions rocked Bamako and several other Malian cities in one of the most significant coordinated jihadist and rebel attacks in years. Jihadist insurgents and separatist groups appear to have synchronized the offensive amid worsening Sahel insecurity (via Al Jazeera, AP).</div>
+          <div class="news-headline">Iran War Toll: 3,375 Dead in Iran, 2,509 in Lebanon, 28 in Gulf States</div>
+          <div class="news-summary">Preliminary casualty figures from the ongoing US-Iran conflict show significant losses on multiple fronts. Iran's foreign minister remains in Moscow seeking Russian diplomatic backing while indirect US-Iran talks remain on hold (via Al Jazeera, Reuters).</div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
-          <div class="news-headline">History: First Sub-2-Hour Marathon Run in Competition — 1:59:30</div>
-          <div class="news-summary">Kenya's Sabastian Sawe made history at the London Marathon on Sunday, becoming the first athlete to break the two-hour barrier in a competitive race with a time of 1:59:30. Ethiopia's Tigst Assefa also set a new women's marathon world record at the same event (via AP).</div>
+          <div class="news-headline">Gaza and West Bank Hold Local Elections — First Step Toward Presidential Vote</div>
+          <div class="news-summary">Palestinian officials say local elections held across Gaza and the West Bank mark the beginning of a political transition process, with a long-delayed presidential election now on the horizon. International observers called the process "imperfect but significant" (via AP, NPR).</div>
         </div>
       </div>
     </div>
@@ -301,23 +300,23 @@
       <div class="news-list">
         <div class="news-item">
           <span class="news-tag tag-politics">Politics</span>
-          <div class="news-headline">WHCD Shooting Suspect Arraigned in Federal Court Today</div>
-          <div class="news-summary">Cole Thomas Allen, 31, of Torrance, CA — the man who stormed Saturday's White House Correspondents' Dinner armed with firearms and knives — is expected to be arraigned today. Acting AG Blanche says the preliminary evidence suggests Allen was targeting Trump administration officials (via NBC News, CNN).</div>
-        </div>
-        <div class="news-item">
-          <span class="news-tag tag-breaking">Breaking</span>
-          <div class="news-headline">Severe Weather Outbreak Targets St. Louis Region This Afternoon</div>
-          <div class="news-summary">The Storm Prediction Center has issued a Moderate Risk (Level 4/5) for the St. Louis area today. Severe storms are expected to develop between 2–10 PM with threats of damaging winds (50–70 mph), baseball-sized hail, and tornadoes. Plan your commute and outdoor work around midday (via KSDK, NWS St. Louis).</div>
+          <div class="news-headline">Trump-Charles Bilateral Today — Iran War Hangs Over "Special Relationship"</div>
+          <div class="news-summary">The Oval Office sit-down will be the diplomatic centerpiece of the royal visit. UK lawmakers had called for the trip to be cancelled given US-UK tensions over Iran; the White House pushed back, calling it a demonstration of the "enduring special relationship" regardless of policy disagreements (via Washington Post, Time, Fox News).</div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-economy">Economy</span>
-          <div class="news-headline">Megacap Tech Earnings Kick Off — MSFT, META, AMZN, GOOG, AAPL All Report This Week</div>
-          <div class="news-summary">The biggest earnings week of Q1 2026 begins today. Markets are watching closely for guidance on AI infrastructure spending, the impact of elevated energy costs, and any signs of consumer slowdown. Fed holds Wednesday — no rate move expected (via Yahoo Finance, CNBC).</div>
+          <div class="news-headline">Fed Begins 2-Day Meeting — Rate Decision Tomorrow</div>
+          <div class="news-summary">The Federal Open Market Committee opens its April 28–29 meeting today. Markets are pricing in a hold, with oil above $96 keeping inflation elevated and making near-term cuts politically difficult. Any surprise dovish language in tomorrow's statement could move markets (via CNBC, WSJ).</div>
         </div>
         <div class="news-item">
-          <span class="news-tag tag-economy">Economy</span>
-          <div class="news-headline">Oil Jumps to $96 as Iran Strait Proposal Fails to Fully Calm Markets</div>
-          <div class="news-summary">WTI crude rose nearly 2% to $96.50 this morning despite Iran's new Hormuz proposal. Analysts say the market remains skeptical given the collapse of weekend talks. Elevated oil continues to pressure inflation expectations ahead of the Fed's May meeting (via TheStreet, FX Daily Report).</div>
+          <span class="news-tag tag-tech">Tech</span>
+          <div class="news-headline">Microsoft &amp; Meta Report Earnings After Close Today</div>
+          <div class="news-summary">Two of the five megacap tech giants report Q1 2026 results today after market close. Investors are focused on AI infrastructure spending guidance and the impact of elevated energy costs on data center margins. Amazon, Alphabet, and Apple follow later this week (via Yahoo Finance, CNBC).</div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-politics">Politics</span>
+          <div class="news-headline">WHCD Shooter Arraigned Monday — Charged with Attempted Murder of Federal Officials</div>
+          <div class="news-summary">Cole Thomas Allen, 31, appeared in federal court Monday and was formally charged. Prosecutors say evidence gathered over the weekend confirms he planned the attack in advance and targeted senior Trump administration officials specifically (via NBC News, CNN).</div>
         </div>
       </div>
     </div>
@@ -332,36 +331,36 @@
         <div class="todo-item priority-high">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Plan around the severe storms — wrap up outdoor work before 2 PM</div>
-            <div class="todo-sub">Damaging winds, hail, and tornado risk from 2–10 PM — don't be caught outside</div>
-          </div>
-        </div>
-        <div class="todo-item priority-high">
-          <div class="todo-check"></div>
-          <div>
-            <div class="todo-text">Move any patio furniture, vehicles, or exposed gear inside before noon</div>
-            <div class="todo-sub">Baseball-sized hail is a confirmed threat today per NWS</div>
+            <div class="todo-text">Check your commute route — flood warnings active for nearby Missouri rivers</div>
+            <div class="todo-sub">Avoid low-lying roads and river-adjacent routes; warnings run through Friday AM</div>
           </div>
         </div>
         <div class="todo-item priority-med">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Abby: Kick off the week's design work — good day to stay inside</div>
-            <div class="todo-sub">Morning clear window before storms; afternoon is WFH territory</div>
+            <div class="todo-text">Wrap up outdoor plans by early afternoon — 50% rain chance from PM onward</div>
+            <div class="todo-sub">Thursday and Friday look clear and warm — push outdoor work to then</div>
           </div>
         </div>
         <div class="todo-item priority-med">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Shane: Review any field or site work — reschedule anything outdoor for Thu/Fri</div>
-            <div class="todo-sub">Thu–Fri look clear and warm; today is not the day for outdoor engineering work</div>
+            <div class="todo-text">Abby: Full focus workday — no weather drama until afternoon</div>
+            <div class="todo-sub">Good morning window for deep design work</div>
+          </div>
+        </div>
+        <div class="todo-item priority-med">
+          <div class="todo-check"></div>
+          <div>
+            <div class="todo-text">Shane: Good indoor engineering day — save site/field work for Thu or Fri</div>
+            <div class="todo-sub">Thu 78°F / Fri 80°F — both clear; best outdoor days of the week</div>
           </div>
         </div>
         <div class="todo-item priority-low">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Watch megacap tech earnings after market close</div>
-            <div class="todo-sub">Microsoft and others report today — bellwether for AI spending trends</div>
+            <div class="todo-text">Watch MSFT &amp; Meta earnings after market close</div>
+            <div class="todo-sub">AI capex guidance will set the tone for the rest of the week's tech reports</div>
           </div>
         </div>
       </div>
