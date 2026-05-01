@@ -90,20 +90,9 @@
       text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted);
     }
 
-    .weather-alert {
-      background: var(--amber-bg);
-      border: 1px solid var(--amber-border);
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-      margin-bottom: 0.75rem;
-      font-size: 0.82rem;
-      color: var(--amber-text);
-      font-weight: 600;
-    }
-
-    .weather-icon { background: var(--blue-bg); }
+    .weather-icon { background: var(--green-bg); }
     .weather-main { display: flex; align-items: flex-end; gap: 0.75rem; margin-bottom: 0.75rem; }
-    .weather-temp { font-size: 2.8rem; font-weight: 300; line-height: 1; color: var(--blue-text); }
+    .weather-temp { font-size: 2.8rem; font-weight: 300; line-height: 1; color: var(--green-text); }
     .weather-desc { font-size: 0.95rem; color: var(--text-muted); padding-bottom: 4px; }
     .weather-details { display: flex; gap: 1rem; flex-wrap: wrap; }
     .weather-detail { font-size: 0.82rem; color: var(--text-muted); }
@@ -172,7 +161,7 @@
 
   <div class="header">
     <h1>Good morning, SHABS ☀️</h1>
-    <span class="date">Wednesday, April 29, 2026</span>
+    <span class="date">Friday, May 1, 2026 — May Day</span>
   </div>
 
   <div class="grid">
@@ -180,40 +169,39 @@
     <!-- WEATHER -->
     <div class="card">
       <div class="card-header">
-        <div class="card-icon weather-icon">🌤</div>
+        <div class="card-icon weather-icon">🌞</div>
         <span class="card-title">Weather — St. Louis</span>
       </div>
-      <div class="weather-alert">⚠️ Flood warning expires 8 PM tonight — river roads still risky until then</div>
       <div class="weather-main">
-        <div class="weather-temp">56°F</div>
-        <div class="weather-desc">Sun &amp; clouds, clearing through the day</div>
+        <div class="weather-temp">62°F</div>
+        <div class="weather-desc">Mostly sunny, pleasant spring day</div>
       </div>
       <div class="weather-details">
-        <div class="weather-detail">High <span>64°F</span></div>
-        <div class="weather-detail">Low <span>42°F</span></div>
-        <div class="weather-detail">Wind <span>15 mph NNW</span></div>
-        <div class="weather-detail">Rain chance <span>1%</span></div>
+        <div class="weather-detail">High <span>74°F</span></div>
+        <div class="weather-detail">Low <span>55°F</span></div>
+        <div class="weather-detail">Wind <span>8 mph SSW</span></div>
+        <div class="weather-detail">Rain chance <span>&lt;5%</span></div>
       </div>
       <div class="weather-forecast">
         <div class="forecast-item">
-          <div class="forecast-day">Thu</div>
+          <div class="forecast-day">Sat</div>
           <div>☀️</div>
           <div class="forecast-temp">78°</div>
         </div>
         <div class="forecast-item">
-          <div class="forecast-day">Fri</div>
-          <div>☀️</div>
-          <div class="forecast-temp">80°</div>
-        </div>
-        <div class="forecast-item">
-          <div class="forecast-day">Sat</div>
-          <div>☀️</div>
-          <div class="forecast-temp">79°</div>
-        </div>
-        <div class="forecast-item">
           <div class="forecast-day">Sun</div>
           <div>⛅</div>
-          <div class="forecast-temp">74°</div>
+          <div class="forecast-temp">75°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Mon</div>
+          <div>☀️</div>
+          <div class="forecast-temp">76°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Tue</div>
+          <div>⛅</div>
+          <div class="forecast-temp">72°</div>
         </div>
       </div>
     </div>
@@ -222,42 +210,42 @@
     <div class="card">
       <div class="card-header">
         <div class="card-icon markets-icon">📈</div>
-        <span class="card-title">Markets — Tue Close</span>
+        <span class="card-title">Markets — Thu Close</span>
       </div>
       <div class="markets-grid">
         <div class="market-item">
           <div class="market-label">S&amp;P 500</div>
-          <div class="market-value">7,138</div>
-          <div class="market-change down">▼ −0.5%</div>
+          <div class="market-value">7,211 ★</div>
+          <div class="market-change up">▲ +1.0% — record</div>
         </div>
         <div class="market-item">
           <div class="market-label">Nasdaq</div>
-          <div class="market-value">24,663</div>
-          <div class="market-change down">▼ −0.9%</div>
+          <div class="market-value">25,079 ★</div>
+          <div class="market-change up">▲ +0.9% — record</div>
         </div>
         <div class="market-item">
           <div class="market-label">Dow Jones</div>
-          <div class="market-value">49,141</div>
-          <div class="market-change down">▼ −0.1%</div>
+          <div class="market-value">49,932</div>
+          <div class="market-change up">▲ +1.6%</div>
         </div>
         <div class="market-item">
           <div class="market-label">10-Yr Yield</div>
-          <div class="market-value">4.40%</div>
-          <div class="market-change down">▼ −0.02</div>
+          <div class="market-value">4.37%</div>
+          <div class="market-change down">▼ −0.03</div>
         </div>
         <div class="market-item">
           <div class="market-label">Bitcoin</div>
-          <div class="market-value">$76,768</div>
-          <div class="market-change down">▼ −1.6%</div>
+          <div class="market-value">~$79,000</div>
+          <div class="market-change up">▲ +2.0%</div>
         </div>
         <div class="market-item">
           <div class="market-label">Oil (WTI)</div>
-          <div class="market-value">$97.07</div>
-          <div class="market-change up">▲ +2.8%</div>
+          <div class="market-value">~$107</div>
+          <div class="market-change up">▲ volatile</div>
         </div>
       </div>
       <div class="market-context">
-        Markets sold off Tuesday after WSJ reported OpenAI missed revenue and user targets, rattling AI sentiment. Oil surged on UAE's surprise OPEC exit. Today is the biggest day of earnings season — MSFT, META, GOOG &amp; AMZN all report after close. Fed rate decision also today (via TheStreet, Yahoo Finance, CNBC).
+        S&amp;P 500 crossed 7,200 for the first time ever Thursday — best month for stocks since 2020. Alphabet and Apple both beat earnings. Fed held at 3.5–3.75%; Powell confirmed he stays on as governor. Oil remains volatile as Hormuz standoff drags on (via CNBC, TheStreet, Yahoo Finance).
       </div>
     </div>
 
@@ -270,23 +258,23 @@
       <div class="news-list">
         <div class="news-item">
           <span class="news-tag tag-breaking">Breaking</span>
-          <div class="news-headline">UAE Withdrawing from OPEC This Week — Energy Markets Shaken</div>
-          <div class="news-summary">The United Arab Emirates announced it will formally exit OPEC this week, a major shock to the cartel's cohesion amid the Iran war's disruption of global oil supply. The move adds fresh volatility to energy markets already rattled by the Strait of Hormuz blockade; WTI surged past $97 on the news (via CNN, Reuters).</div>
+          <div class="news-headline">Iran War Day 62 — Hormuz Deadlock Holds; Trump Weighs Military Options</div>
+          <div class="news-summary">Two months in, the Strait of Hormuz remains effectively closed. Trump warned Iran to "get smart soon" and his national security team is presenting military strike options targeting Iran's Hormuz defenses and fast-attack boats. US gas averages hit $4.23/gallon — a near 4-year high. Speaker Johnson insists the US is "not at war" with Iran (via NBC News, CBS News, NPR).</div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-breaking">Breaking</span>
+          <div class="news-headline">Mali Defense Minister Killed in Major Rebel Attack on Bamako</div>
+          <div class="news-summary">JNIM jihadists and Tuareg separatists launched a coordinated nationwide assault on Mali's capital and other cities, killing Mali's defense minister in the fighting. It is among the most significant attacks on the Sahel nation's government in years (via Al Jazeera, AP).</div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
-          <div class="news-headline">Iran War Day 60 — Ceasefire Fraying, Peace Talks Remain Stalled</div>
-          <div class="news-summary">Two months in, the US-Iran conflict has killed an estimated 3,375 in Iran, 2,509 in Lebanon, and 28 in Gulf states. Israeli strikes killed at least 10 in southern Lebanon overnight, threatening the declared ceasefire. The Strait of Hormuz and Iran's nuclear program remain the two unresolved sticking points blocking a deal (via CNN, Al Jazeera).</div>
+          <div class="news-headline">Israel Intercepts Gaza Aid Flotilla Near Crete</div>
+          <div class="news-summary">Israeli naval forces intercepted dozens of boats attempting to break the Gaza blockade and deliver humanitarian aid. The crews were detained while still near the Greek island of Crete, well before reaching Gaza waters. International aid groups condemned the interception (via AP, Reuters).</div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
-          <div class="news-headline">South Korea: Ousted President Yoon Sentenced to 7 Years in Prison</div>
-          <div class="news-summary">An appeals court sentenced former President Yoon Suk Yeol to seven years for his December 2024 attempt to impose martial law, which was reversed by the National Assembly within hours. The sentencing closes a major chapter in South Korea's political crisis (via AP, Reuters).</div>
-        </div>
-        <div class="news-item">
-          <span class="news-tag tag-tech">Tech</span>
-          <div class="news-headline">EU Accuses Meta of Failing to Protect Minors on Facebook and Instagram</div>
-          <div class="news-summary">European Union regulators formally accused Meta of violating the Digital Services Act by not doing enough to prevent underage users from accessing its platforms. The charge could lead to significant fines and mandated product changes across the EU (via Reuters, Euronews).</div>
+          <div class="news-headline">May Day: Global Labour Rallies; 50+ Nations Convene Climate Summit in Colombia</div>
+          <div class="news-summary">Workers across the globe marked International Labour Day with marches and rallies, with energy costs and the Iran war's inflation impact prominent themes. Separately, more than 50 countries gathered in Santa Marta, Colombia, to discuss concrete timelines for phasing out oil, gas, and coal (via NPR, Reuters).</div>
         </div>
       </div>
     </div>
@@ -299,24 +287,24 @@
       </div>
       <div class="news-list">
         <div class="news-item">
-          <span class="news-tag tag-politics">Politics</span>
-          <div class="news-headline">King Charles Addressed Congress Yesterday — Called for NATO Unity, Ukraine Support</div>
-          <div class="news-summary">In a historic address — only the second time a British monarch has spoken to Congress — King Charles urged the US to remain committed to NATO and Ukraine, and pointedly noted that "executive power is subject to checks and balances." Trump hosted a White House state dinner afterward; Charles gifted Trump the bell from a former Royal Navy submarine (via NPR, CBS News, Al Jazeera).</div>
-        </div>
-        <div class="news-item">
           <span class="news-tag tag-economy">Economy</span>
-          <div class="news-headline">Fed Announces Rate Decision Today — Hold Widely Expected</div>
-          <div class="news-summary">The Federal Open Market Committee wraps its two-day meeting today and will announce its rate decision this afternoon. A hold is near-universally expected given oil above $97 keeping inflation elevated. Markets will parse Jerome Powell's press conference language for any hints about the cut timeline (via WSJ, CNBC).</div>
+          <div class="news-headline">Fed Held Rates; Powell Stays on as Governor — Warsh Senate Vote Coming May 11</div>
+          <div class="news-summary">The Fed held its benchmark rate at 3.5–3.75% Wednesday in an 8-4 vote — the most dissenting votes since 1992. Powell confirmed he will remain on the Fed board as a governor even after his chairmanship ends May 15, citing an ongoing DOJ probe. Kevin Warsh cleared the Senate Banking Committee; full Senate vote expected the week of May 11 (via CNBC, PBS, Washington Post).</div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-politics">Politics</span>
+          <div class="news-headline">Supreme Court Voting Rights Act Ruling Triggers Redistricting Scramble</div>
+          <div class="news-summary">Wednesday's 6-3 SCOTUS ruling limiting Section 2 of the VRA is prompting Republican-led states to move quickly on new congressional maps. Analysts project up to 19 additional House seats could shift Republican before the 2026 midterms. Democrats are challenging the ruling's application in multiple states (via Washington Post, Texas Tribune, Axios).</div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-tech">Tech</span>
-          <div class="news-headline">Biggest Earnings Day of 2026: MSFT, META, GOOG &amp; AMZN All Report Tonight</div>
-          <div class="news-summary">Four of the five largest companies by market cap report Q1 results after the bell today. Analysts are focused on AI infrastructure spending guidance, cloud growth rates, and any signs of advertiser pullback. OpenAI's leaked revenue miss yesterday has raised the stakes. Apple reports Thursday (via Motley Fool, Yahoo Finance).</div>
+          <div class="news-headline">Mag-7 Earnings Sweep: Alphabet &amp; Apple Beat; MSFT, Meta, Amazon Also Solid</div>
+          <div class="news-summary">All five megacap tech companies that reported this week beat analyst expectations on revenue and earnings. AI infrastructure spending guidance was robust — countering Tuesday's OpenAI scare. The results sent the S&amp;P 500 to its first-ever close above 7,200 and capped the best month for stocks since 2020 (via Bloomberg, TheStreet, CNBC).</div>
         </div>
         <div class="news-item">
-          <span class="news-tag tag-tech">Tech</span>
-          <div class="news-headline">OpenAI Missed Revenue and User Targets — Spooked AI Stocks Tuesday</div>
-          <div class="news-summary">A Wall Street Journal report revealed OpenAI fell short of internal targets for weekly active users and revenue, raising questions about whether AI demand justifies the hundreds of billions being spent on data center build-out. The report sent Nasdaq down 0.9% Tuesday (via WSJ, TheStreet).</div>
+          <span class="news-tag tag-politics">Politics</span>
+          <div class="news-headline">Trump Signals Possible Drawdown of US Troops in Germany</div>
+          <div class="news-summary">President Trump said he is considering reducing the US military presence in Germany amid an ongoing public feud with Chancellor Friedrich Merz over the Iran war. Merz has refused to back the US-Israel offensive; Trump has escalated his rhetoric against European allies who won't provide support (via Reuters, CNN).</div>
         </div>
       </div>
     </div>
@@ -331,36 +319,36 @@
         <div class="todo-item priority-high">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Avoid flooded river roads until flood warning lifts at 8 PM tonight</div>
-            <div class="todo-sub">After today it's clear sailing — Thu and Fri look great</div>
-          </div>
-        </div>
-        <div class="todo-item priority-high">
-          <div class="todo-check"></div>
-          <div>
-            <div class="todo-text">Watch the Fed rate decision this afternoon</div>
-            <div class="todo-sub">Hold expected — but Powell's press conference language on oil/inflation could move markets</div>
+            <div class="todo-text">Wrap up the work week — clear open items before the weekend</div>
+            <div class="todo-sub">Saturday looks gorgeous at 78°F — better to go in free than stressed</div>
           </div>
         </div>
         <div class="todo-item priority-med">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Shane: Decent day for lighter outdoor work — 64°F, mostly clear, breezy</div>
-            <div class="todo-sub">Tomorrow hits 78°F and Friday 80°F — best days for heavy outdoor/site work</div>
+            <div class="todo-text">Shane: Great outdoor day — 74°F, sunny, light wind</div>
+            <div class="todo-sub">First truly clean weather day after a rough week — good for site or yard work</div>
           </div>
         </div>
         <div class="todo-item priority-med">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Abby: Good focused workday — no weather disruptions today</div>
-            <div class="todo-sub">Clear and dry all day; pleasant afternoon if you get outside at lunch</div>
+            <div class="todo-text">Abby: Friday design review or portfolio catch-up before the weekend</div>
+            <div class="todo-sub">Nice window to finish any open feedback loops</div>
           </div>
         </div>
         <div class="todo-item priority-low">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Check MSFT, META, GOOG &amp; AMZN earnings after market close</div>
-            <div class="todo-sub">Results tonight will either restore or deepen Tuesday's AI-driven selloff</div>
+            <div class="todo-text">Gas check — prices at $4.23/gallon nationally, fill up strategically</div>
+            <div class="todo-sub">Hormuz still closed; prices likely stay elevated or climb through May</div>
+          </div>
+        </div>
+        <div class="todo-item priority-low">
+          <div class="todo-check"></div>
+          <div>
+            <div class="todo-text">Plan the weekend — Sat 78°F / Sun 75°F, both clear and warm</div>
+            <div class="todo-sub">Best outdoor weekend in St. Louis in weeks</div>
           </div>
         </div>
       </div>
