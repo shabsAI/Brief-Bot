@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHABS — Live Dashboard</title>
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface2: #f0ede6;
+      --text: #1a1a18;
+      --text-muted: #5f5e5a;
+      --border: rgba(0,0,0,0.09);
+      --radius: 12px;
+      --radius-sm: 8px;
+
+      --blue-bg: #e6f1fb; --blue-text: #0c447c; --blue-border: #378add;
+      --green-bg: #eaf3de; --green-text: #3b6d11; --green-border: #639922;
+      --amber-bg: #faeeda; --amber-text: #854f0b; --amber-border: #ba7517;
+      --teal-bg: #e1f5ee; --teal-text: #0f6e56; --teal-border: #1d9e75;
+      --coral-bg: #faece7; --coral-text: #993c1d; --coral-border: #d85a30;
+      --purple-bg: #eeedfe; --purple-text: #3c3489; --purple-border: #7f77dd;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a18;
+        --surface: #26261f;
+        --surface2: #2c2c2a;
+        --text: #f0ede6;
+        --text-muted: #b4b2a9;
+        --border: rgba(255,255,255,0.09);
+
+        --blue-bg: #042c53; --blue-text: #b5d4f4; --blue-border: #185fa5;
+        --green-bg: #173404; --green-text: #c0dd97; --green-border: #3b6d11;
+        --amber-bg: #412402; --amber-text: #fac775; --amber-border: #854f0b;
+        --teal-bg: #04342c; --teal-text: #9fe1cb; --teal-border: #0f6e56;
+        --coral-bg: #4a1b0c; --coral-text: #f5c4b3; --coral-border: #993c1d;
+        --purple-bg: #26215c; --purple-text: #cecbf6; --purple-border: #534ab7;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .page { max-width: 1200px; margin: 0 auto; }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .header-title { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; }
+    .header-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 1px; }
+
+    .header-right { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+    .clock {
+      font-size: 1.7rem;
+      font-weight: 200;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .date-line { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+    .live-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--green-text);
+      background: var(--green-bg);
+      border-radius: 20px;
+      padding: 3px 10px;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green-text);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .btn {
+      background: var(--surface2);
+      border: 0.5px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.76rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.15s;
+    }
+    .btn:hover { color: var(--text); }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .card-icon {
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .card-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+    }
+    .card-badge {
+      margin-left: auto;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      background: var(--surface2);
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* ── Layout grids ── */
+    .top-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 680px) {
+      .top-grid, .news-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Weather ── */
+    .weather-main {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .weather-temp {
+      font-size: 3rem;
+      font-weight: 200;
+      line-height: 1;
+      color: var(--blue-text);
+      font-variant-numeric: tabular-nums;
+    }
+    .weather-cond { font-size: 1rem; margin-bottom: 2px; }
+    .weather-feels { font-size: 0.75rem; color: var(--text-muted); }
+
+    .weather-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1rem;
+      margin-bottom: 0.9rem;
+    }
+    .stat { font-size: 0.76rem; color: var(--text-muted); }
+    .stat strong { color: var(--text); font-weight: 500; }
+
+    .forecast-row { display: flex; gap: 0.4rem; }
+    .forecast-chip {
+      flex: 1;
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 6px 4px;
+      text-align: center;
+    }
+    .fc-day { font-size: 0.66rem; color: var(--text-muted); margin-bottom: 2px; }
+    .fc-icon { font-size: 0.95rem; margin: 2px 0; }
+    .fc-hi { font-size: 0.8rem; font-weight: 600; }
+    .fc-lo { font-size: 0.7rem; color: var(--text-muted); }
+
+    /* ── Markets ── */
+    .markets-tiles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .market-tile {
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 9px 11px;
+    }
+    .mt-label { font-size: 0.66rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+    .mt-value { font-size: 1rem; font-weight: 600; margin-bottom: 1px; }
+    .mt-change { font-size: 0.73rem; font-weight: 500; }
+    .up   { color: var(--green-text); }
+    .down { color: var(--coral-text); }
+    .flat { color: var(--text-muted); }
+
+    .market-note {
+      margin-top: 0.65rem;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 7px 10px;
+      line-height: 1.4;
+    }
+
+    /* ── News ── */
+    .news-feed { display: flex; flex-direction: column; }
+    .news-story {
+      padding: 0.6rem 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .news-story:first-child { padding-top: 0; }
+    .news-story:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .news-story a {
+      font-size: 0.84rem;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--text);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .news-story a:hover { color: var(--blue-text); }
+    .news-story-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .news-story-time { font-size: 0.68rem; color: var(--text-muted); margin-top: 3px; }
+
+    /* ── States ── */
+    .loading-msg { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
+    .error-msg   { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+    .footer a { color: var(--text-muted); text-decoration: none; }
+    .footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="header-title">SHABS Dashboard</div>
+      <div class="header-sub">St. Louis, MO</div>
+    </div>
+    <div class="header-right">
+      <div>
+        <div class="clock" id="clock">--:--:--</div>
+        <div class="date-line" id="date-line"></div>
+      </div>
+      <div class="live-pill"><div class="live-dot"></div>Live</div>
+      <button class="btn" onclick="refreshAll()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- Top row: Weather + Markets -->
+  <div class="top-grid">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:var(--blue-bg)">🌤</div>
+        <span class="card-label">Weather — St. Louis</span>
+        <span class="card-badge" id="weather-badge">—</span>
+      </div>
+      <div id="weather-body"><div class="loading-msg">Fetching weather…</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:var(--green-bg)">📈</div>
+        <span class="card-label">Markets</span>
+        <span class="card-badge" id="markets-badge">—</span>
+      </div>
+      <div id="markets-body"><div class="loading-msg">Fetching market data…</div></div>
+    </div>
+
+  </div>
+
+  <!-- News row -->
+  <div class="news-grid">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:var(--coral-bg)">🌍</div>
+        <span class="card-label">World News</span>
+        <span class="card-badge">BBC</span>
+      </div>
+      <div class="news-feed" id="world-news-body"><div class="loading-msg">Fetching news…</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:var(--purple-bg)">🇺🇸</div>
+        <span class="card-label">US News</span>
+        <span class="card-badge">NPR</span>
+      </div>
+      <div class="news-feed" id="us-news-body"><div class="loading-msg">Fetching news…</div></div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>Updated <strong id="last-updated">—</strong></span>
+    <span>Refreshes every 5 min</span>
+    <a href="briefing.html">Today's brief →</a>
+  </div>
+
+</div>
+<script>
+// ── Config ────────────────────────────────────────────────────────────────────
+const LAT = 38.6270, LON = -90.1994;
+const REFRESH_MS = 5 * 60 * 1000;
+const proxy = url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+
+// ── WMO weather code maps ─────────────────────────────────────────────────────
+const WMO_ICON = {
+  0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+  45:'🌫️', 48:'🌫️',
+  51:'🌦️', 53:'🌦️', 55:'🌧️',
+  61:'🌧️', 63:'🌧️', 65:'🌧️',
+  71:'🌨️', 73:'❄️',  75:'❄️',  77:'🌨️',
+  80:'🌦️', 81:'🌧️', 82:'⛈️',
+  85:'🌨️', 86:'❄️',
+  95:'⛈️', 96:'⛈️', 99:'⛈️',
+};
+const WMO_LABEL = {
+  0:'Clear', 1:'Mainly clear', 2:'Partly cloudy', 3:'Overcast',
+  45:'Foggy', 48:'Icy fog',
+  51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
+  61:'Light rain', 63:'Rain', 65:'Heavy rain',
+  71:'Light snow', 73:'Snow', 75:'Heavy snow', 77:'Snow grains',
+  80:'Showers', 81:'Heavy showers', 82:'Violent showers',
+  85:'Snow showers', 86:'Heavy snow showers',
+  95:'Thunderstorm', 96:'Thunderstorm', 99:'Thunderstorm',
+};
+const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ── Clock ─────────────────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('clock').textContent =
+    `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  document.getElementById('date-line').textContent =
+    `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── Weather (Open-Meteo, no key needed) ───────────────────────────────────────
+async function fetchWeather() {
+  const url = 'https://api.open-meteo.com/v1/forecast'
+    + `?latitude=${LAT}&longitude=${LON}`
+    + '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,precipitation_probability'
+    + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max'
+    + '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch'
+    + '&timezone=America%2FChicago&forecast_days=5';
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('weather');
+  return r.json();
+}
+
+function renderWeather(data) {
+  const c = data.current, d = data.daily;
+  const icon = WMO_ICON[c.weather_code] || '🌡️';
+  const label = WMO_LABEL[c.weather_code] || '';
+
+  const chips = d.time.slice(1, 5).map((t, i) => {
+    const fi = i + 1;
+    const day = DAYS[new Date(t + 'T12:00:00').getDay()];
+    return `<div class="forecast-chip">
+      <div class="fc-day">${day}</div>
+      <div class="fc-icon">${WMO_ICON[d.weather_code[fi]] || '🌡️'}</div>
+      <div class="fc-hi">${Math.round(d.temperature_2m_max[fi])}°</div>
+      <div class="fc-lo">${Math.round(d.temperature_2m_min[fi])}°</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('weather-body').innerHTML = `
+    <div class="weather-main">
+      <div class="weather-temp">${Math.round(c.temperature_2m)}°F</div>
+      <div style="padding-bottom:4px">
+        <div class="weather-cond">${icon} ${label}</div>
+        <div class="weather-feels">Feels like ${Math.round(c.apparent_temperature)}°F</div>
+      </div>
+    </div>
+    <div class="weather-stats">
+      <div class="stat">High <strong>${Math.round(d.temperature_2m_max[0])}°F</strong></div>
+      <div class="stat">Low <strong>${Math.round(d.temperature_2m_min[0])}°F</strong></div>
+      <div class="stat">Wind <strong>${Math.round(c.wind_speed_10m)} mph</strong></div>
+      <div class="stat">Humidity <strong>${c.relative_humidity_2m}%</strong></div>
+      <div class="stat">Rain <strong>${c.precipitation_probability}%</strong></div>
+    </div>
+    <div class="forecast-row">${chips}</div>`;
+  document.getElementById('weather-badge').textContent = 'Live';
+}
+
+// ── Markets (Yahoo Finance via proxy) ─────────────────────────────────────────
+const MARKET_DEFS = [
+  { sym: '^GSPC',   label: 'S&P 500',    fmt: 'idx'    },
+  { sym: '^IXIC',   label: 'Nasdaq',     fmt: 'idx'    },
+  { sym: '^DJI',    label: 'Dow Jones',  fmt: 'idx'    },
+  { sym: '^TNX',    label: '10-Yr Yield',fmt: 'yield'  },
+  { sym: 'CL=F',    label: 'Oil (WTI)',  fmt: 'dollar' },
+  { sym: 'BTC-USD', label: 'Bitcoin',    fmt: 'crypto' },
+];
+
+async function fetchMarkets() {
+  const syms = MARKET_DEFS.map(m => m.sym).join(',');
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}`;
+  const r = await fetch(proxy(url));
+  if (!r.ok) throw new Error('markets');
+  const json = await r.json();
+  return json.quoteResponse?.result || [];
+}
+
+function fmtVal(n, fmt) {
+  if (fmt === 'yield')  return n.toFixed(2) + '%';
+  if (fmt === 'crypto') return '$' + Math.round(n).toLocaleString();
+  if (fmt === 'idx')    return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  return '$' + n.toFixed(2);
+}
+
+function renderMarkets(quotes) {
+  const map = Object.fromEntries(quotes.map(q => [q.symbol, q]));
+  const tiles = MARKET_DEFS.map(def => {
+    const q = map[def.sym];
+    if (!q) return `<div class="market-tile"><div class="mt-label">${def.label}</div><div class="mt-value flat">—</div></div>`;
+    const pct = q.regularMarketChangePercent;
+    const dir = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat';
+    const arrow = pct > 0 ? '▲' : pct < 0 ? '▼' : '—';
+    return `<div class="market-tile">
+      <div class="mt-label">${def.label}</div>
+      <div class="mt-value">${fmtVal(q.regularMarketPrice, def.fmt)}</div>
+      <div class="mt-change ${dir}">${arrow} ${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%</div>
+    </div>`;
+  }).join('');
+
+  const isOpen = quotes[0]?.marketState === 'REGULAR';
+  document.getElementById('markets-body').innerHTML = `<div class="markets-tiles">${tiles}</div>
+    <div class="market-note">${isOpen ? '🟢 Markets open' : '🔴 Markets closed'} — data via Yahoo Finance</div>`;
+  document.getElementById('markets-badge').textContent = isOpen ? 'Open' : 'Closed';
+}
+
+// ── News (RSS via proxy, parsed client-side) ──────────────────────────────────
+async function fetchRSS(rssUrl) {
+  const r = await fetch(proxy(rssUrl));
+  if (!r.ok) throw new Error('rss');
+  const text = await r.text();
+  const xml = new DOMParser().parseFromString(text, 'text/xml');
+  return Array.from(xml.querySelectorAll('item')).slice(0, 7).map(item => {
+    const raw = item.querySelector('description')?.textContent || '';
+    const desc = raw.replace(/<[^>]+>/g, '').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').trim();
+    // link element text may be blank in some feeds; try nextSibling trick
+    let link = '';
+    const linkEl = item.querySelector('link');
+    if (linkEl) {
+      link = linkEl.textContent?.trim() || linkEl.nextSibling?.textContent?.trim() || '';
+    }
+    return {
+      title: item.querySelector('title')?.textContent?.trim() || '',
+      link: link || '#',
+      desc: desc.substring(0, 180) + (desc.length > 180 ? '…' : ''),
+      pubDate: item.querySelector('pubDate')?.textContent || '',
+    };
+  });
+}
+
+function timeAgo(str) {
+  if (!str) return '';
+  const d = new Date(str);
+  if (isNaN(d)) return '';
+  const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60)    return 'just now';
+  if (s < 3600)  return `${Math.floor(s / 60)}m ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+  return `${Math.floor(s / 86400)}d ago`;
+}
+
+function renderNews(items, id) {
+  document.getElementById(id).innerHTML = items.map(item => `
+    <div class="news-story">
+      <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+      ${item.desc ? `<div class="news-story-desc">${item.desc}</div>` : ''}
+      <div class="news-story-time">${timeAgo(item.pubDate)}</div>
+    </div>`).join('');
+}
+
+// ── Refresh all ───────────────────────────────────────────────────────────────
+async function refreshAll() {
+  document.getElementById('last-updated').textContent =
+    new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+
+  await Promise.allSettled([
+    fetchWeather()
+      .then(renderWeather)
+      .catch(() => {
+        document.getElementById('weather-body').innerHTML =
+          '<div class="error-msg">Weather unavailable — check <a href="https://forecast.weather.gov" target="_blank">NWS</a></div>';
+      }),
+
+    fetchMarkets()
+      .then(renderMarkets)
+      .catch(() => {
+        document.getElementById('markets-body').innerHTML =
+          '<div class="error-msg">Market data unavailable — check <a href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a></div>';
+        document.getElementById('markets-badge').textContent = '—';
+      }),
+
+    fetchRSS('https://feeds.bbci.co.uk/news/world/rss.xml')
+      .then(items => renderNews(items, 'world-news-body'))
+      .catch(() => {
+        document.getElementById('world-news-body').innerHTML =
+          '<div class="error-msg">World news feed unavailable</div>';
+      }),
+
+    fetchRSS('https://feeds.npr.org/1001/rss.xml')
+      .then(items => renderNews(items, 'us-news-body'))
+      .catch(() => {
+        document.getElementById('us-news-body').innerHTML =
+          '<div class="error-msg">US news feed unavailable</div>';
+      }),
+  ]);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+refreshAll();
+setInterval(refreshAll, REFRESH_MS);
+</script>
+</body>
+</html>
