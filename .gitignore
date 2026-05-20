@@ -1,3 +1,4 @@
 .env
 briefing.log
 briefings/
+node_modules/

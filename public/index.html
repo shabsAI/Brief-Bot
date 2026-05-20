@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brief Bot</title>
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface2: #f0ede6;
+      --surface3: #e8e5de;
+      --text: #1a1a18;
+      --text-muted: #5f5e5a;
+      --border: rgba(0,0,0,0.08);
+      --border-strong: rgba(0,0,0,0.14);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --nav-h: 52px;
+
+      --blue-bg: #e6f1fb; --blue-text: #0c447c; --blue-border: #378add;
+      --green-bg: #eaf3de; --green-text: #3b6d11; --green-border: #639922;
+      --amber-bg: #faeeda; --amber-text: #854f0b; --amber-border: #ba7517;
+      --coral-bg: #faece7; --coral-text: #993c1d; --coral-border: #d85a30;
+      --purple-bg: #eeedfe; --purple-text: #3c3489;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a18;
+        --surface: #26261f;
+        --surface2: #2c2c2a;
+        --surface3: #323230;
+        --text: #f0ede6;
+        --text-muted: #b4b2a9;
+        --border: rgba(255,255,255,0.08);
+        --border-strong: rgba(255,255,255,0.14);
+        --blue-bg: #042c53; --blue-text: #b5d4f4; --blue-border: #185fa5;
+        --green-bg: #173404; --green-text: #c0dd97; --green-border: #3b6d11;
+        --amber-bg: #412402; --amber-text: #fac775; --amber-border: #854f0b;
+        --coral-bg: #4a1b0c; --coral-text: #f5c4b3; --coral-border: #993c1d;
+        --purple-bg: #26215c; --purple-text: #cecbf6;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      height: var(--nav-h);
+      background: var(--surface);
+      border-bottom: 0.5px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 50;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      white-space: nowrap;
+      margin-right: 0.25rem;
+    }
+    .nav-brand-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 2px;
+    }
+    .nav-tab {
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      transition: background 0.12s, color 0.12s;
+    }
+    .nav-tab:hover { background: var(--surface2); color: var(--text); }
+    .nav-tab.active {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .nav-spacer { flex: 1; }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--surface2);
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-border);
+      flex-shrink: 0;
+    }
+    .status-dot.busy {
+      background: var(--amber-border);
+      animation: blink 1.1s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 13px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+    .btn:hover:not(:disabled) { opacity: 0.78; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: var(--text); color: var(--bg); }
+    .btn-ghost {
+      background: var(--surface2);
+      color: var(--text);
+      border: 0.5px solid var(--border-strong);
+    }
+    .btn-danger { background: var(--coral-bg); color: var(--coral-text); }
+
+    /* ── Content area ── */
+    .content {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tab-pane {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+    .tab-pane.active { display: flex; flex-direction: column; }
+
+    /* ── Briefing tab ── */
+    #tab-briefing iframe {
+      flex: 1;
+      border: none;
+      width: 100%;
+    }
+
+    /* ── History tab ── */
+    #tab-history {
+      flex-direction: row !important;
+    }
+
+    .history-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      border-right: 0.5px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+    }
+    .history-sidebar-header {
+      padding: 0.9rem 1rem 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .history-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.4rem;
+    }
+    .history-item {
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      transition: background 0.1s, color 0.1s;
+    }
+    .history-item:hover { background: var(--surface2); color: var(--text); }
+    .history-item.active {
+      background: var(--surface2);
+      color: var(--text);
+      font-weight: 500;
+    }
+    .history-item-date { font-weight: 600; color: var(--text); font-size: 0.85rem; }
+    .history-item-label { font-size: 0.74rem; color: var(--text-muted); }
+
+    .history-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .history-main iframe {
+      flex: 1;
+      border: none;
+      width: 100%;
+    }
+    .history-empty {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    /* ── Template tab ── */
+    #tab-template {
+      padding: 0;
+    }
+    .template-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--surface);
+      border-bottom: 0.5px solid var(--border-strong);
+      flex-shrink: 0;
+    }
+    .template-toolbar-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .template-unsaved {
+      font-size: 0.74rem;
+      color: var(--amber-text);
+      background: var(--amber-bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: none;
+    }
+    .template-unsaved.visible { display: inline; }
+    .template-toolbar .spacer { flex: 1; }
+    .template-editor {
+      flex: 1;
+      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      padding: 1rem 1.25rem;
+      border: none;
+      resize: none;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      width: 100%;
+    }
+
+    /* ── Schedule tab ── */
+    #tab-schedule {
+      overflow-y: auto;
+    }
+    .schedule-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .schedule-section {
+      background: var(--surface);
+      border: 0.5px solid var(--border-strong);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .schedule-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.1rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .schedule-section-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+    }
+    .schedule-section-body {
+      padding: 1rem 1.1rem;
+    }
+    .stat-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      padding: 4px 0;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      min-width: 90px;
+    }
+    .stat-value {
+      font-size: 0.88rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .cron-editor {
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      padding: 0.75rem 1rem;
+      border: 0.5px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--surface2);
+      color: var(--text);
+      width: 100%;
+      resize: vertical;
+      min-height: 80px;
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+    }
+    .cron-hint {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+    .cron-hint code {
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      background: var(--surface2);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .cron-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .schedule-toast {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+    .schedule-toast.ok { background: var(--green-bg); color: var(--green-text); display: inline-flex; }
+    .schedule-toast.err { background: var(--coral-bg); color: var(--coral-text); display: inline-flex; }
+
+    /* ── Log drawer ── */
+    .log-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .log-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .log-drawer {
+      background: var(--surface);
+      border-radius: var(--radius) var(--radius) 0 0;
+      border: 0.5px solid var(--border-strong);
+      width: 100%;
+      max-width: 700px;
+      max-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(24px);
+      transition: transform 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .log-backdrop.open .log-drawer {
+      transform: translateY(0);
+    }
+    .log-drawer-header {
+      display: flex;
+      align-items: center;
+      padding: 0.85rem 1.1rem;
+      border-bottom: 0.5px solid var(--border);
+      gap: 0.75rem;
+    }
+    .log-drawer-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      flex: 1;
+    }
+    .log-drawer-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .log-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.9rem 1.1rem;
+    }
+    .log-output {
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .log-line-ok { color: var(--green-text); }
+    .log-line-err { color: var(--coral-text); }
+
+    /* ── Toast notification ── */
+    .toast-bar {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .toast {
+      background: var(--text);
+      color: var(--bg);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      animation: toast-in 0.2s ease;
+    }
+    @keyframes toast-in { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-brand-icon">📰</div>
+      Brief Bot
+    </div>
+
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="briefing">Briefing</button>
+      <button class="nav-tab" data-tab="history">History</button>
+      <button class="nav-tab" data-tab="template">Template</button>
+      <button class="nav-tab" data-tab="schedule">Schedule</button>
+    </div>
+
+    <div class="nav-spacer"></div>
+
+    <div class="status-pill" id="status-pill">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Ready</span>
+    </div>
+
+    <button class="btn btn-primary" id="generate-btn">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M13.65 2.35A8 8 0 1 0 15 8h-1.5a6.5 6.5 0 1 1-1.13-3.65L10 6.5h4.5V2L13.65 2.35z"/>
+      </svg>
+      Generate
+    </button>
+  </nav>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Briefing tab -->
+    <div class="tab-pane active" id="tab-briefing">
+      <iframe id="briefing-frame" src="/api/briefing/current" title="Daily Briefing"></iframe>
+    </div>
+
+    <!-- History tab -->
+    <div class="tab-pane" id="tab-history">
+      <div class="history-sidebar">
+        <div class="history-sidebar-header">Past briefings</div>
+        <div class="history-list" id="history-list">
+          <div style="padding:1rem;font-size:0.8rem;color:var(--text-muted)">Loading…</div>
+        </div>
+      </div>
+      <div class="history-main">
+        <div class="history-empty" id="history-empty">← Select a briefing to preview</div>
+        <iframe id="history-frame" src="about:blank" title="Past Briefing" style="display:none;flex:1;border:none;width:100%"></iframe>
+      </div>
+    </div>
+
+    <!-- Template tab -->
+    <div class="tab-pane" id="tab-template">
+      <div class="template-toolbar">
+        <span class="template-toolbar-title">briefing_template.html</span>
+        <span class="template-unsaved" id="template-unsaved">Unsaved changes</span>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" id="template-discard" disabled>Discard</button>
+        <button class="btn btn-primary" id="template-save" disabled>Save template</button>
+      </div>
+      <textarea class="template-editor" id="template-editor" spellcheck="false" placeholder="Loading template…"></textarea>
+    </div>
+
+    <!-- Schedule tab -->
+    <div class="tab-pane" id="tab-schedule">
+      <div class="schedule-inner">
+
+        <div class="schedule-section">
+          <div class="schedule-section-header">
+            <span class="schedule-section-title">Last Run</span>
+          </div>
+          <div class="schedule-section-body">
+            <div class="stat-row">
+              <span class="stat-label">Date</span>
+              <span class="stat-value" id="sched-last-run">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Commit</span>
+              <span class="stat-value" id="sched-last-subject">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="schedule-section">
+          <div class="schedule-section-header">
+            <span class="schedule-section-title">Crontab</span>
+          </div>
+          <div class="schedule-section-body">
+            <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.75rem">
+              Edit the system crontab to control when the briefing auto-generates.
+              The entry should point to <code style="font-family:monospace;background:var(--surface2);padding:1px 5px;border-radius:4px">/home/user/Brief-Bot/run_briefing.sh</code>.
+            </p>
+            <textarea class="cron-editor" id="cron-editor" spellcheck="false" rows="4"></textarea>
+            <p class="cron-hint">
+              Example: <code>0 6 * * * /bin/bash /home/user/Brief-Bot/run_briefing.sh</code>
+              — runs daily at 6 AM. Use <a href="https://crontab.guru" target="_blank" rel="noopener" style="color:var(--blue-text)">crontab.guru</a> to build expressions.
+            </p>
+            <div class="cron-actions">
+              <button class="btn btn-primary" id="cron-save">Save crontab</button>
+              <span class="schedule-toast" id="cron-toast"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+</div><!-- /app -->
+
+<!-- Log drawer -->
+<div class="log-backdrop" id="log-backdrop">
+  <div class="log-drawer">
+    <div class="log-drawer-header">
+      <span class="log-drawer-title" id="log-title">Generating briefing…</span>
+      <span class="log-drawer-status" id="log-status"></span>
+      <button class="btn btn-ghost" id="log-close" disabled>Close</button>
+    </div>
+    <div class="log-drawer-body">
+      <div class="log-output" id="log-output"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast bar -->
+<div class="toast-bar" id="toast-bar"></div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────
+
+const state = {
+  tab: 'briefing',
+  generating: false,
+  historyLoaded: false,
+  templateOriginal: '',
+  templateDirty: false,
+};
+
+// ── Tabs ─────────────────────────────────────────────────────────
+
+function switchTab(name) {
+  state.tab = name;
+  document.querySelectorAll('.nav-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-pane').forEach(p =>
+    p.classList.toggle('active', p.id === `tab-${name}`));
+
+  if (name === 'history' && !state.historyLoaded) loadHistory();
+  if (name === 'template') loadTemplate();
+  if (name === 'schedule') loadSchedule();
+}
+
+document.querySelectorAll('.nav-tab').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+// ── Generate ─────────────────────────────────────────────────────
+
+const generateBtn = document.getElementById('generate-btn');
+const statusDot = document.getElementById('status-dot');
+const statusText = document.getElementById('status-text');
+const logBackdrop = document.getElementById('log-backdrop');
+const logTitle = document.getElementById('log-title');
+const logStatus = document.getElementById('log-status');
+const logOutput = document.getElementById('log-output');
+const logClose = document.getElementById('log-close');
+
+function setGenerating(on) {
+  state.generating = on;
+  generateBtn.disabled = on;
+  statusDot.classList.toggle('busy', on);
+  statusText.textContent = on ? 'Generating…' : 'Ready';
+}
+
+function appendLog(line, cls) {
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = line + '\n';
+  logOutput.appendChild(span);
+  logOutput.scrollTop = logOutput.scrollHeight;
+}
+
+generateBtn.addEventListener('click', () => {
+  if (state.generating) return;
+  setGenerating(true);
+
+  logOutput.textContent = '';
+  logTitle.textContent = 'Generating briefing…';
+  logStatus.textContent = '';
+  logClose.disabled = true;
+  logBackdrop.classList.add('open');
+
+  const es = new EventSource('/api/generate');
+
+  es.onmessage = (e) => {
+    const line = e.data;
+    const cls = line.toLowerCase().includes('error') || line.toLowerCase().includes('fail')
+      ? 'log-line-err'
+      : line.startsWith('[Brief Bot]') ? 'log-line-ok' : '';
+    appendLog(line, cls);
+  };
+
+  es.addEventListener('done', (e) => {
+    es.close();
+    const { code } = JSON.parse(e.data);
+    setGenerating(false);
+    logClose.disabled = false;
+
+    if (code === 0) {
+      logTitle.textContent = '✓ Briefing generated';
+      logStatus.textContent = 'Success';
+      appendLog('', '');
+      appendLog('Done! Reload the briefing to see it.', 'log-line-ok');
+      // Refresh briefing frame
+      const frame = document.getElementById('briefing-frame');
+      frame.src = '/api/briefing/current?' + Date.now();
+      // Reset history so it reloads
+      state.historyLoaded = false;
+      showToast('Briefing updated');
+    } else {
+      logTitle.textContent = '✗ Generation failed';
+      logStatus.textContent = `Exit code ${code}`;
+      appendLog(`Process exited with code ${code}`, 'log-line-err');
+      showToast('Generation failed — check the log');
+    }
+  });
+
+  es.onerror = () => {
+    es.close();
+    setGenerating(false);
+    logClose.disabled = false;
+    logTitle.textContent = '✗ Connection error';
+    appendLog('Lost connection to server.', 'log-line-err');
+  };
+});
+
+logClose.addEventListener('click', () => logBackdrop.classList.remove('open'));
+logBackdrop.addEventListener('click', (e) => {
+  if (e.target === logBackdrop && !state.generating) logBackdrop.classList.remove('open');
+});
+
+// ── History ───────────────────────────────────────────────────────
+
+async function loadHistory() {
+  const list = document.getElementById('history-list');
+  list.innerHTML = '<div style="padding:1rem;font-size:0.8rem;color:var(--text-muted)">Loading…</div>';
+
+  try {
+    const res = await fetch('/api/briefing/history');
+    const entries = await res.json();
+    state.historyLoaded = true;
+
+    if (!entries.length) {
+      list.innerHTML = '<div style="padding:1rem;font-size:0.8rem;color:var(--text-muted)">No past briefings found.</div>';
+      return;
+    }
+
+    list.innerHTML = '';
+    entries.forEach((entry, i) => {
+      const item = document.createElement('div');
+      item.className = 'history-item' + (i === 0 ? ' active' : '');
+      item.innerHTML = `
+        <div class="history-item-date">${entry.date}</div>
+        <div class="history-item-label">${entry.subject || ''}</div>
+      `;
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+        loadHistoryBriefing(entry.hash);
+      });
+      list.appendChild(item);
+    });
+
+    // Auto-load the first (most recent)
+    if (entries.length) loadHistoryBriefing(entries[0].hash);
+
+  } catch (err) {
+    list.innerHTML = `<div style="padding:1rem;font-size:0.8rem;color:var(--coral-text)">Error: ${err.message}</div>`;
+  }
+}
+
+function loadHistoryBriefing(hash) {
+  const empty = document.getElementById('history-empty');
+  const frame = document.getElementById('history-frame');
+  empty.style.display = 'none';
+  frame.style.display = 'block';
+  frame.src = `/api/briefing/${hash}`;
+}
+
+// ── Template ──────────────────────────────────────────────────────
+
+const templateEditor = document.getElementById('template-editor');
+const templateUnsaved = document.getElementById('template-unsaved');
+const templateSave = document.getElementById('template-save');
+const templateDiscard = document.getElementById('template-discard');
+
+async function loadTemplate() {
+  try {
+    const res = await fetch('/api/template');
+    const { content } = await res.json();
+    state.templateOriginal = content;
+    templateEditor.value = content;
+    setTemplateDirty(false);
+  } catch (err) {
+    templateEditor.value = `Error loading template: ${err.message}`;
+  }
+}
+
+function setTemplateDirty(dirty) {
+  state.templateDirty = dirty;
+  templateUnsaved.classList.toggle('visible', dirty);
+  templateSave.disabled = !dirty;
+  templateDiscard.disabled = !dirty;
+}
+
+templateEditor.addEventListener('input', () => {
+  setTemplateDirty(templateEditor.value !== state.templateOriginal);
+});
+
+templateEditor.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveTemplate();
+  }
+});
+
+templateSave.addEventListener('click', saveTemplate);
+
+templateDiscard.addEventListener('click', () => {
+  templateEditor.value = state.templateOriginal;
+  setTemplateDirty(false);
+});
+
+async function saveTemplate() {
+  if (!state.templateDirty) return;
+  templateSave.disabled = true;
+  templateSave.textContent = 'Saving…';
+
+  try {
+    const res = await fetch('/api/template', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: templateEditor.value }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      state.templateOriginal = templateEditor.value;
+      setTemplateDirty(false);
+      showToast('Template saved');
+    } else {
+      showToast(`Save failed: ${data.error}`);
+    }
+  } catch (err) {
+    showToast(`Error: ${err.message}`);
+  } finally {
+    templateSave.disabled = false;
+    templateSave.textContent = 'Save template';
+  }
+}
+
+// ── Schedule ──────────────────────────────────────────────────────
+
+async function loadSchedule() {
+  try {
+    const res = await fetch('/api/schedule');
+    const { crontab, lastRun, lastSubject } = await res.json();
+
+    const schedLastRun = document.getElementById('sched-last-run');
+    const schedLastSubject = document.getElementById('sched-last-subject');
+    const cronEditor = document.getElementById('cron-editor');
+
+    if (lastRun) {
+      const d = new Date(lastRun);
+      schedLastRun.textContent = d.toLocaleString('en-US', {
+        weekday: 'long', month: 'long', day: 'numeric',
+        year: 'numeric', hour: 'numeric', minute: '2-digit',
+      });
+    } else {
+      schedLastRun.textContent = 'No briefings yet';
+    }
+    schedLastSubject.textContent = lastSubject || '—';
+    cronEditor.value = crontab;
+  } catch (err) {
+    showToast(`Error loading schedule: ${err.message}`);
+  }
+}
+
+document.getElementById('cron-save').addEventListener('click', async () => {
+  const toast = document.getElementById('cron-toast');
+  const btn = document.getElementById('cron-save');
+  const crontab = document.getElementById('cron-editor').value;
+
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  toast.className = 'schedule-toast';
+
+  try {
+    const res = await fetch('/api/schedule', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ crontab }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      toast.className = 'schedule-toast ok';
+      toast.textContent = 'Saved';
+    } else {
+      toast.className = 'schedule-toast err';
+      toast.textContent = data.error || 'Failed';
+    }
+  } catch (err) {
+    toast.className = 'schedule-toast err';
+    toast.textContent = err.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save crontab';
+    setTimeout(() => { toast.className = 'schedule-toast'; }, 3000);
+  }
+});
+
+// ── Toast ─────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  const bar = document.getElementById('toast-bar');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  bar.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+</script>
+</body>
+</html>
