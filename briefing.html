@@ -107,9 +107,30 @@
 
     .news-icon { background: var(--coral-bg); }
     .us-news-icon { background: var(--purple-bg); }
-    .news-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .news-item { padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border); }
-    .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .news-list { display: flex; flex-direction: column; gap: 0; }
+
+    .news-item {
+      padding: 8px 2rem 0.75rem 8px;
+      margin: 0 -8px;
+      border-bottom: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      position: relative;
+      transition: background 0.12s;
+    }
+    .news-item:first-child { margin-top: -8px; }
+    .news-item:last-child { border-bottom: none; padding-bottom: 8px; }
+    .news-item:hover { background: var(--surface2); }
+    .news-item::after {
+      content: '›';
+      position: absolute;
+      right: 10px; top: 12px;
+      font-size: 1.2rem; line-height: 1;
+      color: var(--text-muted); opacity: 0.55;
+    }
+
+    .story-detail { display: none; }
+
     .news-tag {
       display: inline-block; font-size: 0.7rem; font-weight: 600;
       padding: 2px 8px; border-radius: 4px; margin-bottom: 4px;
@@ -153,6 +174,73 @@
     .priority-low .todo-check { border-color: var(--green-border); }
 
     .footer { margin-top: 2rem; text-align: center; font-size: 0.78rem; color: var(--text-muted); }
+
+    /* Story detail drawer */
+    .drawer-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 100;
+    }
+    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      width: 100%; max-height: 78vh;
+      overflow-y: auto;
+      padding: 0 1.5rem 2.5rem;
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .drawer-backdrop.open .drawer { transform: translateY(0); }
+    .drawer-handle {
+      width: 36px; height: 4px;
+      background: var(--border); border-radius: 2px;
+      margin: 0.75rem auto 1.25rem;
+    }
+    .drawer-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .drawer-close {
+      background: var(--surface2); border: none;
+      border-radius: 50%; width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 0.95rem; color: var(--text-muted);
+      flex-shrink: 0; line-height: 1;
+    }
+    .drawer-close:hover { background: var(--border); color: var(--text); }
+    .drawer-headline {
+      font-size: 1.05rem; font-weight: 600;
+      line-height: 1.4; color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .drawer-body { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; }
+    .drawer-body p { margin-bottom: 0.8rem; }
+    .drawer-body p:last-child { margin-bottom: 0; }
+    .drawer-body a { color: var(--blue-text); text-decoration: none; }
+    .drawer-body a:hover { text-decoration: underline; }
+    .drawer-sources {
+      margin-top: 1.25rem; padding-top: 1rem;
+      border-top: 0.5px solid var(--border);
+      font-size: 0.78rem; color: var(--text-muted);
+    }
+    .drawer-sources a { color: var(--text-muted); text-decoration: underline; }
+
+    @media (min-width: 640px) {
+      .drawer-backdrop { align-items: center; justify-content: center; }
+      .drawer {
+        border-radius: var(--radius);
+        max-width: 600px; max-height: 72vh;
+        transform: scale(0.96) translateY(10px);
+        opacity: 0;
+        transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.18s ease;
+      }
+      .drawer-backdrop.open .drawer { transform: scale(1) translateY(0); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -255,26 +343,52 @@
         <span class="card-title">World News</span>
       </div>
       <div class="news-list">
+
         <div class="news-item">
           <span class="news-tag tag-breaking">Breaking</span>
           <div class="news-headline">U.S.-Iran 60-Day Ceasefire Extension Agreed — Awaiting Trump's Signature</div>
           <div class="news-summary">Negotiators reached a memorandum of understanding to extend the ceasefire and open nuclear talks, hours after both sides exchanged fresh strikes. Trump has not yet signed. If approved, it would gradually reopen Persian Gulf energy exports and is the closest the two sides have come to ending the three-month war (via CNBC, Fox News).</div>
+          <div class="story-detail">
+            <p>The U.S.-Iran conflict — now roughly three months old — began after Iran accelerated uranium enrichment past weapons-grade thresholds. The resulting war has kept the Strait of Hormuz partially closed, affecting roughly 20% of global oil supply and pushing energy prices up sharply before this week's deal optimism reversed some of those gains.</p>
+            <p>The MOU's key terms, per negotiators: a 60-day pause in offensive military operations, gradual reopening of Persian Gulf shipping lanes, and the start of formal nuclear talks mediated by Oman. Iran's internal hardliners are the biggest risk — the IRGC has publicly rejected previous draft agreements, and the Supreme Leader's formal endorsement of this MOU has not yet been confirmed. Trump has historically been skeptical of Iran deals but advisers say economic pressure from elevated oil prices is a significant factor pushing him toward signing.</p>
+            <p>What to watch today: Trump's formal statement is expected before markets close. A signed MOU would likely push WTI below $85 and boost equities. A rejection or delay keeps the status quo.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.cnbc.com/2026/05/28/oil-prices-us-strikes-in-iran-revive-strait-of-hormuz-turmoil-fears.html">CNBC</a>, <a href="https://www.foxnews.com/politics/us-iran-reach-ceasefire-extension-pending-trumps-final-approval">Fox News</a></div>
+          </div>
         </div>
+
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
           <div class="news-headline">Ebola Outbreak Spreading in Eastern Congo — Epicenter in Gold-Mining Town of 130,000</div>
           <div class="news-summary">WHO officials say the outbreak is centered in Mongbwalu, Ituri province — a remote but densely populated mining hub — complicating containment efforts. Congo's health ministry declared a public health emergency. Travel advisories are being updated (via NPR, CBS News).</div>
+          <div class="story-detail">
+            <p>The Democratic Republic of Congo has experienced more than 15 Ebola outbreaks since the virus was first identified there in 1976. This outbreak is centered in Mongbwalu, a gold-mining town in Ituri province in northeastern DRC — a region with poor road infrastructure, active armed conflict with local militias, and limited cold-chain capacity for vaccine distribution. These factors make containment significantly harder than in urban or accessible areas.</p>
+            <p>The WHO has an approved Ebola vaccine (rVSV-ZEBOV) that was deployed effectively in the 2018–2020 Kivu outbreak, which killed over 2,000 people. Logistics remain the central challenge: vaccination teams need security escorts in parts of Ituri, and community trust is fragile after years of conflict. The current case count hasn't been disclosed publicly as of this morning; the CDC is monitoring closely. The U.S. State Department currently lists Ituri province under a Level 3 "Reconsider Travel" advisory.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.npr.org/sections/world/">NPR</a>, <a href="https://www.cbsnews.com/world/">CBS News</a></div>
+          </div>
         </div>
+
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
           <div class="news-headline">Europe Heat Wave — London Hits 95°F for Second Straight Day, Records Fall Across Continent</div>
           <div class="news-summary">An unprecedented late-May heat wave has pushed temperatures to record highs across northwestern Europe. London recorded 95°F (35°C) for a second consecutive day, prompting government emergency warnings and strain on transit and healthcare systems (via PBS NewsHour).</div>
+          <div class="story-detail">
+            <p>Late-May temperatures of 95°F in London are roughly 29°F above the historical average for this time of year. The heat dome is affecting much of western and central Europe simultaneously: Paris reached 101°F (38°C), Amsterdam 93°F (34°C), and Madrid 104°F (40°C). Climate scientists note that extreme heat events of this magnitude now occur roughly 5 times more frequently than they did in the pre-industrial era.</p>
+            <p>Infrastructure consequences are significant. The UK's National Grid issued a Level 3 heat health alert and activated emergency hospital protocols. London's Underground suspended service on several lines due to rail expansion risks — the tube wasn't designed for prolonged temperatures above 86°F at track level. France reduced output at several nuclear plants because river water temperatures used for cooling exceed regulatory limits. At least 200 heat-related deaths have been reported across Europe in the first 48 hours of the event, with numbers expected to rise.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.youtube.com/watch?v=1Il9kdDVmpY">PBS NewsHour</a>, <a href="https://www.euronews.com/video/2026/05/27/latest-news-bulletin-may-27th-2026-midday">Euronews</a></div>
+          </div>
         </div>
+
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
           <div class="news-headline">Pope Leo's First Encyclical Warns of AI Risks to Humanity</div>
           <div class="news-summary">In his inaugural papal letter, Pope Leo addressed what he called the existential moral challenges posed by artificial intelligence, urging global governance frameworks and warning against the erosion of human dignity in automated decision-making (via PBS NewsHour).</div>
+          <div class="story-detail">
+            <p>A papal encyclical is the most authoritative type of document a pope can issue, addressed to all bishops and by extension the world's 1.4 billion Catholics. Pope Leo, who succeeded Francis in 2025, used his first to address AI — a notable signal of where the Church sees the most pressing moral threats of the current era. The document argues that AI systems making decisions about people — in healthcare, criminal justice, financial lending, or warfare — must be subject to meaningful human oversight and must not reduce individuals to data points.</p>
+            <p>The encyclical specifically calls for an international treaty banning fully autonomous lethal weapons systems (so-called "killer robots"), echoing positions held by the UN Secretary-General but resisted by major military powers. It also warns about AI's potential to deepen economic inequality and erodes informed consent in media. Tech industry reactions were mixed: some welcomed the moral framework as aligned with responsible AI principles; others pushed back on the call for binding international regulation. The full text is available on the Vatican website in multiple languages.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.youtube.com/watch?v=1Il9kdDVmpY">PBS NewsHour</a></div>
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -285,26 +399,51 @@
         <span class="card-title">US News &amp; Politics</span>
       </div>
       <div class="news-list">
+
         <div class="news-item">
           <span class="news-tag tag-politics">Politics</span>
           <div class="news-headline">Ex-CIA Official Arrested — $40M in Gold Bars, Cash, and Rolexes Seized After FBI Raid</div>
           <div class="news-summary">Federal agents seized roughly $40 million in assets from a former senior U.S. intelligence official with top secret clearance who allegedly fabricated a military career as a Navy pilot. The case is being described as one of the largest insider corruption busts in recent CIA history (via Fox News).</div>
+          <div class="story-detail">
+            <p>The suspect, a former senior CIA official whose name has not yet been officially released, held a Top Secret/SCI clearance and worked in a senior role related to foreign operations. According to court documents, he fabricated military service records — including claiming to be a decorated Navy fighter pilot — to obtain his position and additional security clearances, then allegedly used access to classified information and government contracts to accumulate the assets seized by the FBI. The raid on his Virginia home turned up physical gold bars, multiple Rolex watches, large amounts of cash, and real estate documents totaling approximately $40 million.</p>
+            <p>The charges include wire fraud, money laundering, and making false statements to federal investigators. Prosecutors say the 18-month investigation began after a tip from a former colleague who noticed discrepancies in his military records. The CIA has declined to comment on specific operational details but confirmed he was no longer employed by the agency at the time of arrest. Defense attorneys have not yet entered a plea.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.foxnews.com/us/us-feds-seize-40m-gold-bars-cash-rolexes-senior-us-govt-official-faked-navy-pilot">Fox News</a></div>
+          </div>
         </div>
+
         <div class="news-item">
           <span class="news-tag tag-politics">Politics</span>
           <div class="news-headline">Treasury Weighing $250 Bill Featuring Trump's Image for 250th Anniversary</div>
           <div class="news-summary">The Treasury Department is evaluating a proposal to issue a new $250 denomination bill bearing President Trump's likeness as part of the nation's semiquincentennial celebrations. No final decision has been made, but the idea is generating significant debate (via CBS News).</div>
+          <div class="story-detail">
+            <p>The United States celebrates its 250th anniversary (America250) in July 2026. As part of the commemorations, the Trump administration has reportedly tasked Treasury officials with evaluating several special-edition currency proposals. The $250 denomination would be the largest since the $500, $1,000, $5,000, and $10,000 bills were last printed in 1945 and taken out of circulation in 1969. High-denomination bills were discontinued primarily to hinder organized crime and money laundering.</p>
+            <p>The most significant legal and historical obstacle is that U.S. law and longstanding Treasury practice prohibit the image of a living person from appearing on U.S. currency — a tradition dating to an 1866 Act of Congress. Enacting this proposal would require either a Congressional vote to change that law or a legal argument that special commemorative currency falls outside the statute. Critics from both parties have raised concerns about the precedent, while Trump allies argue the 250th anniversary is a unique enough occasion to justify an exception. No timeline has been given for a final decision.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.cbsnews.com/news/trump-250-bill-treasury/">CBS News</a></div>
+          </div>
         </div>
+
         <div class="news-item">
           <span class="news-tag tag-breaking">Breaking</span>
           <div class="news-headline">Explosion and Fire at Dallas Apartment Building — At Least 4 Injured</div>
           <div class="news-summary">An explosion rocked a two-story apartment building in Dallas' Oak Cliff neighborhood, sending a massive black smoke plume skyward. At least four people were taken to area hospitals. The cause is under investigation (via Fox News).</div>
+          <div class="story-detail">
+            <p>The explosion occurred early this morning at a two-story residential building in Dallas' Oak Cliff neighborhood, a historically underserved area in southwest Dallas. Dallas Fire-Rescue responded with multiple units and confirmed that four residents were transported to Parkland Memorial Hospital with injuries ranging from minor burns to smoke inhalation. The building sustained significant structural damage on the ground floor and was evacuated.</p>
+            <p>Investigators are currently treating the cause as a suspected gas leak, though they have not ruled out other possibilities. Dallas Fire-Rescue says the investigation could take several days. Residents displaced by the explosion are being assisted by the Dallas chapter of the American Red Cross. This is a developing story and the injury count or cause could be updated throughout the day.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.foxnews.com/us/explosion-rocks-dallas-apartment-building-massive-fire-sends-black-smoke-sky-least-4-injured">Fox News</a></div>
+          </div>
         </div>
+
         <div class="news-item">
           <span class="news-tag tag-tech">Tech</span>
           <div class="news-headline">Google Employee Arrested for Using Insider Info to Make $1M on Polymarket</div>
           <div class="news-summary">A Google employee was arrested for allegedly exploiting proprietary knowledge to place prediction market bets on Polymarket, netting approximately $1 million. The case is believed to be one of the first federal insider trading prosecutions tied to a prediction market platform (via PBS NewsHour).</div>
+          <div class="story-detail">
+            <p>Polymarket is a crypto-based prediction market platform where users bet on the probability of real-world outcomes — product launches, election results, regulatory decisions, and similar events. The arrested Google employee, whose name has not yet been officially released, allegedly used knowledge of upcoming Google product announcements and partnership agreements — information not yet public — to place bets on correlated Polymarket markets, netting roughly $1 million over a six-month period.</p>
+            <p>The case is legally significant because prediction markets occupy a gray area in securities law. Prosecutors are charging the individual under wire fraud and potentially securities fraud statutes, arguing that using material non-public information to profit in any market — including prediction markets — can constitute insider trading. Legal scholars are divided: some argue prediction market contracts aren't securities under the SEC's current framework; others say the wire fraud theory is solid regardless. Google stated it is cooperating fully with investigators and that its code of conduct "explicitly prohibits employees from using proprietary information for personal financial gain." This case is likely to prompt clearer regulatory guidance on prediction market insider trading.</p>
+            <div class="drawer-sources">Sources: <a href="https://www.youtube.com/watch?v=1Il9kdDVmpY">PBS NewsHour</a></div>
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -344,9 +483,54 @@
   <div class="footer">Generated by your daily briefing agent &mdash; <span id="gen-time"></span></div>
 </div>
 
+<!-- Story detail drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop" role="dialog" aria-modal="true" aria-label="Story detail">
+  <div class="drawer" id="drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-header">
+      <div id="drawerTag"></div>
+      <button class="drawer-close" id="drawerClose" aria-label="Close">✕</button>
+    </div>
+    <div class="drawer-headline" id="drawerHeadline"></div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+</div>
+
 <script>
   const now = new Date();
   document.getElementById('gen-time').textContent = 'Updated ' + now.toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit'});
+
+  (function () {
+    var backdrop = document.getElementById('drawerBackdrop');
+    var drawerTag = document.getElementById('drawerTag');
+    var drawerHeadline = document.getElementById('drawerHeadline');
+    var drawerBody = document.getElementById('drawerBody');
+
+    document.querySelectorAll('.news-item').forEach(function (item) {
+      var detail = item.querySelector('.story-detail');
+      if (!detail) return;
+      item.addEventListener('click', function () {
+        drawerTag.innerHTML = item.querySelector('.news-tag').outerHTML;
+        drawerHeadline.textContent = item.querySelector('.news-headline').textContent;
+        drawerBody.innerHTML = detail.innerHTML;
+        backdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeDrawer() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', function (e) {
+      if (e.target === backdrop) closeDrawer();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  })();
 </script>
 </body>
 </html>
