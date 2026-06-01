@@ -80,14 +80,13 @@
     }
     .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
     .card-icon {
-      width: 32px; height: 32px;
-      border-radius: var(--radius-sm);
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
       display: flex; align-items: center; justify-content: center;
       font-size: 16px; flex-shrink: 0;
     }
     .card-title {
-      font-size: 0.8rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted);
+      font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--text-muted);
     }
 
     .weather-icon { background: var(--blue-bg); }
@@ -160,7 +159,7 @@
 
   <div class="header">
     <h1>Good morning, SHABS ☀️</h1>
-    <span class="date">Thursday, April 23, 2026</span>
+    <span class="date" id="briefing-date">Sunday, June 1, 2026</span>
   </div>
 
   <div class="grid">
@@ -168,39 +167,39 @@
     <!-- WEATHER -->
     <div class="card">
       <div class="card-header">
-        <div class="card-icon weather-icon">🌤</div>
+        <div class="card-icon weather-icon">⛈</div>
         <span class="card-title">Weather — St. Louis</span>
       </div>
       <div class="weather-main">
-        <div class="weather-temp">72°F</div>
-        <div class="weather-desc">Sunny, few afternoon clouds</div>
+        <div class="weather-temp">76°F</div>
+        <div class="weather-desc">Thunderstorms Likely</div>
       </div>
       <div class="weather-details">
-        <div class="weather-detail">High <span>84°F</span></div>
-        <div class="weather-detail">Low <span>63°F</span></div>
-        <div class="weather-detail">Wind <span>10–20 mph S</span></div>
-        <div class="weather-detail">Rain <span>5% chance</span></div>
+        <div class="weather-detail">High <span>83°F</span></div>
+        <div class="weather-detail">Low <span>66°F</span></div>
+        <div class="weather-detail">Rain <span>51% chance</span></div>
+        <div class="weather-detail">Humidity <span>~78%</span></div>
       </div>
       <div class="weather-forecast">
         <div class="forecast-item">
-          <div class="forecast-day">Fri</div>
-          <div>⛅</div>
-          <div class="forecast-temp">76°</div>
-        </div>
-        <div class="forecast-item">
-          <div class="forecast-day">Sat</div>
-          <div>🌧</div>
-          <div class="forecast-temp">58°</div>
-        </div>
-        <div class="forecast-item">
-          <div class="forecast-day">Sun</div>
-          <div>☀️</div>
-          <div class="forecast-temp">69°</div>
-        </div>
-        <div class="forecast-item">
           <div class="forecast-day">Mon</div>
+          <div>⛅</div>
+          <div class="forecast-temp">79°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Tue</div>
           <div>☀️</div>
-          <div class="forecast-temp">68°</div>
+          <div class="forecast-temp">84°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Wed</div>
+          <div>☀️</div>
+          <div class="forecast-temp">87°</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-day">Thu</div>
+          <div>🌧</div>
+          <div class="forecast-temp">75°</div>
         </div>
       </div>
     </div>
@@ -209,42 +208,42 @@
     <div class="card">
       <div class="card-header">
         <div class="card-icon markets-icon">📈</div>
-        <span class="card-title">Markets</span>
+        <span class="card-title">Markets — Friday Close</span>
       </div>
       <div class="markets-grid">
         <div class="market-item">
           <div class="market-label">S&amp;P 500</div>
-          <div class="market-value">7,139</div>
-          <div class="market-change up">▲ +0.02%</div>
+          <div class="market-value">7,600</div>
+          <div class="market-change up">▲ +0.26%</div>
         </div>
         <div class="market-item">
           <div class="market-label">Nasdaq</div>
-          <div class="market-value">24,619</div>
-          <div class="market-change down">▼ −0.16%</div>
+          <div class="market-value">27,087</div>
+          <div class="market-change up">▲ +0.42%</div>
         </div>
         <div class="market-item">
           <div class="market-label">Dow Jones</div>
-          <div class="market-value">49,420</div>
-          <div class="market-change down">▼ −0.14%</div>
+          <div class="market-value">51,079</div>
+          <div class="market-change up">▲ +0.09%</div>
         </div>
         <div class="market-item">
           <div class="market-label">10-Yr Yield</div>
-          <div class="market-value">4.58%</div>
-          <div class="market-change up">▲ +0.03</div>
+          <div class="market-value">4.45%</div>
+          <div class="market-change up">▲ elevated</div>
         </div>
         <div class="market-item">
           <div class="market-label">Bitcoin</div>
-          <div class="market-value">$78,509</div>
-          <div class="market-change down">▼ −1.03%</div>
+          <div class="market-value">~$77K</div>
+          <div class="market-change down">▼ pressured</div>
         </div>
         <div class="market-item">
           <div class="market-label">Oil (WTI)</div>
-          <div class="market-value">$93.94</div>
-          <div class="market-change up">▲ +1.05%</div>
+          <div class="market-value">~$108</div>
+          <div class="market-change down">▼ easing</div>
         </div>
       </div>
       <div class="market-context">
-        Equities wavered as Strait of Hormuz tensions pushed oil above $94. ServiceNow and IBM earnings disappointed; software stocks seeing worst day in years. 81% of S&amp;P 500 reporters have beaten estimates overall (via Yahoo Finance, TheStreet).
+        All three major indexes hit all-time highs Friday on an Nvidia-led tech rally. Oil near $108 but easing on US–Iran ceasefire extension hopes. Bitcoin pressured by elevated yields and energy prices via CNBC.
       </div>
     </div>
 
@@ -256,24 +255,29 @@
       </div>
       <div class="news-list">
         <div class="news-item">
-          <span class="news-tag tag-world">World</span>
-          <div class="news-headline">US-Iran War Day 55 — Hormuz Standoff Escalates, Trump Orders Navy to Shoot Iranian Mine-Layers</div>
-          <div class="news-summary">Iran's IRGC seized two foreign vessels and opened fire on a third near the Strait of Hormuz. Trump ordered the US Navy to "shoot and kill" Iranian boats placing mines, while saying there is "no time frame" for peace talks. Iran says the US naval blockade of its ports remains the central obstacle to negotiations (via Al Jazeera, CNN).</div>
+          <span class="news-tag tag-breaking">Breaking</span>
+          <div class="news-headline">US Strikes Iranian Sites; Iran Retaliates Against Kuwait Base</div>
+          <div class="news-summary">American aircraft struck Iranian radar and drone installations on Qeshm Island in the Strait of Hormuz over the weekend. Iran said it launched retaliatory strikes on a US base in Kuwait. Trump stated the US "shouldn't have been in Iran" in a Sunday Fox News interview, signaling potential diplomatic off-ramp. <em>Via Al Jazeera, NBC News</em></div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
-          <div class="news-headline">Israel-Lebanon Ceasefire Fraying — Hezbollah Resumes Fire for First Time Since Truce</div>
-          <div class="news-summary">Hezbollah launched rockets and drones at Israeli forces for the first time since a 10-day ceasefire took effect, raising fears of collapse. A second round of negotiations between Israel and Lebanon begins in Washington today (via CNN).</div>
+          <div class="news-headline">Israel Captures Beaufort Castle, Signaling Extended Lebanon Presence</div>
+          <div class="news-summary">Israeli forces seized the historic 12th-century Beaufort Castle overlooking southern Lebanon, alongside airstrikes in Tyre. Analysts say the move signals Israel intends a longer-term military foothold in the region beyond the current conflict. <em>Via Al Jazeera</em></div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-world">World</span>
-          <div class="news-headline">Record Rains Flood Southern China; Japan Wildfires Force 1,000+ to Evacuate</div>
-          <div class="news-summary">Southern China's strongest rainstorm of the year — over 320mm in 24 hours — broke April rainfall records at 13 weather stations. In northeastern Japan, wildfires in the Kozuchi district spread to buildings and woodland, prompting mass evacuations (via Euronews).</div>
+          <div class="news-headline">Tough-on-Crime Outsider Leads Colombia's Presidential First Round</div>
+          <div class="news-summary">Aberaldo de la Espriella topped Sunday's first-round results in Colombia, setting up a runoff against leftist Iván Cepeda, an ally of outgoing President Gustavo Petro. The outcome signals potential sharp rightward shift in Colombian politics. <em>Via AP</em></div>
         </div>
         <div class="news-item">
-          <span class="news-tag tag-tech">Tech</span>
-          <div class="news-headline">Apple's Incoming CEO John Ternus in Focus as Leadership Transition Begins</div>
-          <div class="news-summary">Analysts and investors are watching closely to see what strategic shifts Ternus will prioritize, particularly AI product integration and supply chain diversification away from China (via Bloomberg).</div>
+          <span class="news-tag tag-tech">Science</span>
+          <div class="news-headline">Pancreatic Cancer Drug Shows "Unprecedented" Results — May Help Other Cancers Too</div>
+          <div class="news-summary">Experimental drug daraxonrasib doubled survival time in patients with advanced pancreatic cancer. Researchers are now investigating its effectiveness against lung, colon, and ovarian cancers as well. <em>Via NBC News</em></div>
+        </div>
+        <div class="news-item">
+          <span class="news-tag tag-breaking">Health Alert</span>
+          <div class="news-headline">Congo Reports 1,000+ Suspected Bundibugyo Virus Cases</div>
+          <div class="news-summary">The DRC has recorded over 1,000 suspected Bundibugyo hemorrhagic fever cases. No approved treatment or vaccine exists. WHO and health authorities are monitoring closely for further spread. <em>Via WHO</em></div>
         </div>
       </div>
     </div>
@@ -287,23 +291,23 @@
       <div class="news-list">
         <div class="news-item">
           <span class="news-tag tag-politics">Politics</span>
-          <div class="news-headline">Trump Approval Sinks to Mid-30s — Advisers Shift to Party-vs-Party Midterm Frame</div>
-          <div class="news-summary">Three polls this week put Trump's approval in the mid-30% range. Advisers are reportedly reframing the 2026 midterms as a choice between party platforms rather than a referendum on Trump, acknowledging significant ground lost with voters over the past year (via CNN).</div>
+          <div class="news-headline">Judge Halts Trump's $1.8B "Anti-Weaponization" Fund Amid Rare GOP Backlash</div>
+          <div class="news-summary">A federal judge issued a temporary block on the fund intended to compensate Trump supporters claiming wrongful prosecution by prior administrations. Over a dozen Republican senators privately urged the White House to drop the plan, citing concerns it could reward Jan. 6 participants. <em>Via NBC News</em></div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-politics">Politics</span>
-          <div class="news-headline">Senate Passes ICE Funding 50–48 Without Democrats as DHS Shutdown Continues</div>
-          <div class="news-summary">Senate Republicans approved a budget blueprint funding ICE and border patrol along party lines. The broader Department of Homeland Security shutdown remains unresolved as negotiations stall (via CNN).</div>
+          <div class="news-headline">Epstein Files Blame Game: Bondi Points to AG Successor Blanche</div>
+          <div class="news-summary">Former AG Pam Bondi publicly claimed she had no real authority over the Epstein file release, redirecting blame to current AG Todd Blanche — Trump's former personal lawyer. The files have been subject to repeated delays, fueling public frustration. <em>Via NBC News</em></div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-politics">Politics</span>
-          <div class="news-headline">Navy Secretary Phelan Fired After Suggesting Warship Production Could Be Outsourced</div>
-          <div class="news-summary">Secretary of the Navy John Phelan was dismissed after months of internal friction, with the final trigger being a speech in which he signaled openness to outsourcing US Navy warship production abroad — directly at odds with administration policy (via CNN).</div>
+          <div class="news-headline">Federal Judge Orders Trump's Name Removed From Kennedy Center</div>
+          <div class="news-summary">A court ruled that renaming the Kennedy Center for the Performing Arts after Trump exceeded executive authority and ordered the name removed. The administration is expected to appeal the ruling. <em>Via Democracy Now</em></div>
         </div>
         <div class="news-item">
           <span class="news-tag tag-economy">Economy</span>
-          <div class="news-headline">62 Million Americans Exposed to Elevated Nitrates in Tap Water, EWG Finds</div>
-          <div class="news-summary">Roughly 1 in 5 Americans — concentrated in agricultural Midwest areas — may have tap water with nitrate levels linked to health risks, per a new Environmental Working Group report. Worth checking your local St. Louis water quality report (via EWG).</div>
+          <div class="news-headline">Markets at All-Time Highs; Fed Rate Hike Odds Creeping Up</div>
+          <div class="news-summary">Tech rally pushed all three major indexes to record closes Friday. Traders are increasingly pricing in a possible Fed rate hike before year-end as inflation shows signs of re-acceleration, a dynamic worth watching heading into June. <em>Via CNBC, Schwab</em></div>
         </div>
       </div>
     </div>
@@ -318,22 +322,22 @@
         <div class="todo-item priority-high">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Review portfolio exposure to oil &amp; energy — WTI above $94</div>
-            <div class="todo-sub">Hormuz standoff likely to keep prices elevated short-term</div>
+            <div class="todo-text">Plan around thunderstorms — stay flexible today</div>
+            <div class="todo-sub">51% rain chance, high 83°F. Pack an umbrella; outdoor plans may need to shift.</div>
           </div>
         </div>
         <div class="todo-item priority-med">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Get outside today — 84°F and sunny, last warm day before weekend</div>
-            <div class="todo-sub">Saturday drops to 58° with showers; Sunday/Monday bounce back</div>
+            <div class="todo-text">Follow Iran situation — could move fast this week</div>
+            <div class="todo-sub">US strikes + Iran retaliation + ceasefire talks. Watch for oil price and market reaction Monday.</div>
           </div>
         </div>
         <div class="todo-item priority-low">
           <div class="todo-check"></div>
           <div>
-            <div class="todo-text">Check St. Louis tap water quality report</div>
-            <div class="todo-sub">In light of EWG's Midwest nitrate findings</div>
+            <div class="todo-text">Sunday reset — review week ahead</div>
+            <div class="todo-sub">Markets at ATH. Good time to check any investments. Clearer weather arrives Tue–Wed.</div>
           </div>
         </div>
       </div>
